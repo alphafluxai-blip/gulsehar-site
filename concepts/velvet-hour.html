@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Velvet Hour, A Cocktail Room</title>
+<meta name="description" content="Velvet Hour is a fictional premium cocktail room concept, designed as a cinematic design showcase.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0F1A;
+  --bg2:#0F172A;
+  --panel:#121A2E;
+  --line:rgba(245,238,220,.14);
+  --cream:#F5EEDC;
+  --soft:#CFC7B4;
+  --muted:#9A9484;
+  --gold:#F59E0B;
+  --gold2:#FFC727;
+  --serif:"Fraunces", Georgia, serif;
+  --sans:"Manrope", system-ui, -apple-system, sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--cream);font-family:var(--sans);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+::selection{background:var(--gold);color:#0B0F1A}
+
+/* Nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:20px 5vw;background:linear-gradient(180deg, rgba(11,15,26,.92), rgba(11,15,26,0));transition:background .4s ease}
+.nav.scrolled{background:rgba(11,15,26,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
+.logo{font-family:var(--serif);font-size:1.25rem;letter-spacing:.04em;font-weight:600}
+.logo span{color:var(--gold)}
+.nav-links{display:flex;gap:34px;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--soft)}
+.nav-links a:hover{color:var(--gold2)}
+.nav-cta{border:1px solid var(--gold);color:var(--gold2);padding:10px 18px;border-radius:999px;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;transition:.3s}
+.nav-cta:hover{background:var(--gold);color:#0B0F1A}
+@media(max-width:760px){.nav-links{display:none}}
+
+/* Hero */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:120px 5vw 64px;position:relative;overflow:hidden;background:radial-gradient(900px 500px at 85% 8%, rgba(245,158,11,.14), transparent 60%), linear-gradient(160deg, #0B0F1A 0%, #0F172A 52%, #0B0F1A 100%)}
+.hero-lines{position:absolute;inset:0;opacity:.5;pointer-events:none;background:repeating-linear-gradient(90deg, transparent 0 119px, rgba(245,238,220,.035) 119px 120px)}
+.hero-orb{position:absolute;width:540px;height:540px;border-radius:50%;right:-120px;top:12%;background:radial-gradient(circle, rgba(255,199,39,.16), rgba(245,158,11,.05) 45%, transparent 70%);will-change:transform}
+.hero-ring{position:absolute;right:8vw;top:18%;width:340px;height:340px;border:1px solid rgba(245,158,11,.28);border-radius:50%;will-change:transform}
+.hero-ring::after{content:"";position:absolute;inset:26px;border:1px solid rgba(245,238,220,.12);border-radius:50%}
+.badge{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;background:var(--gold);color:#0B0F1A;font-weight:700;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;padding:8px 14px;border-radius:999px;margin-bottom:28px}
+.badge::before{content:"";width:7px;height:7px;border-radius:50%;background:#0B0F1A}
+.eyebrow{font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold2);margin-bottom:18px}
+.hero h1{font-family:var(--serif);font-weight:300;font-size:clamp(3.8rem,11vw,9.5rem);line-height:.92;letter-spacing:-.02em;max-width:10ch}
+.hero h1 em{font-style:italic;font-weight:400;color:var(--gold2)}
+.hero-sub{margin-top:28px;max-width:560px;color:var(--soft);font-size:1.08rem}
+.hero-actions{display:flex;flex-wrap:wrap;gap:16px;margin-top:36px}
+.btn{display:inline-block;padding:16px 28px;border-radius:999px;font-weight:700;font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;transition:.3s}
+.btn-gold{background:var(--gold);color:#0B0F1A}
+.btn-gold:hover{background:var(--gold2)}
+.btn-ghost{border:1px solid var(--line);color:var(--cream)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold2)}
+.hero-meta{display:flex;flex-wrap:wrap;gap:28px 48px;margin-top:56px;padding-top:28px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+.hero-meta strong{display:block;color:var(--cream);font-family:var(--serif);font-size:1.15rem;font-weight:600}
+
+/* Layout */
+section{padding:110px 5vw}
+.wrap{max-width:1180px;margin:0 auto}
+.kicker{font-size:.75rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+h2{font-family:var(--serif);font-weight:400;font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.05;letter-spacing:-.01em}
+h2 em{color:var(--gold2);font-style:italic}
+.lead{color:var(--soft);max-width:640px;margin-top:18px;font-size:1.05rem}
+
+/* Reveal */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .9s ease, transform .9s ease}
+.reveal.visible{opacity:1;transform:none}
+.reveal.d1{transition-delay:.08s}.reveal.d2{transition-delay:.16s}.reveal.d3{transition-delay:.24s}
+
+/* Story */
+.story{background:#0D1322}
+.story-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center}
+@media(max-width:860px){.story-grid{grid-template-columns:1fr}}
+.story-copy p{color:var(--soft);margin-top:20px}
+.story-copy p strong{color:var(--cream)}
+.pull{font-family:var(--serif);font-size:1.6rem;line-height:1.3;font-style:italic;color:var(--cream);border-left:3px solid var(--gold);padding-left:22px;margin-top:34px}
+.type-panel{background:linear-gradient(165deg, #16203A, #0B0F1A 70%);border:1px solid var(--line);border-radius:20px;padding:42px;min-height:420px;display:flex;flex-direction:column;justify-content:space-between}
+.type-panel .big{font-family:var(--serif);font-size:clamp(3rem,6vw,5rem);line-height:.95;font-weight:300}
+.type-panel .big span{color:var(--gold2);font-style:italic}
+.type-panel .row{display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);padding-top:20px;color:var(--muted);font-size:.82rem;letter-spacing:.12em;text-transform:uppercase}
+
+/* Menu */
+.menu-list{margin-top:56px;border-top:1px solid var(--line)}
+.drink{display:grid;grid-template-columns:64px 1fr auto;gap:24px;padding:30px 6px;border-bottom:1px solid var(--line);align-items:baseline;transition:background .3s, padding .3s}
+.drink:hover{background:rgba(245,158,11,.045);padding-left:14px}
+.drink .no{font-family:var(--serif);color:var(--gold);font-style:italic;font-size:1.1rem}
+.drink h3{font-family:var(--serif);font-weight:600;font-size:1.55rem;line-height:1.15}
+.drink p{color:var(--muted);margin-top:6px;max-width:560px;font-size:.95rem}
+.drink .tags{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+.tag{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--line);color:var(--soft);padding:5px 10px;border-radius:999px}
+.price{font-family:var(--serif);font-size:1.4rem;color:var(--gold2);white-space:nowrap}
+.menu-note{margin-top:26px;color:var(--muted);font-size:.9rem}
+@media(max-width:640px){.drink{grid-template-columns:1fr auto}.drink .no{display:none}}
+
+/* Gallery */
+.gallery{background:#0D1322}
+.gal-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px;margin-top:52px}
+.panel{border-radius:18px;overflow:hidden;border:1px solid var(--line);min-height:280px;display:flex;align-items:flex-end;padding:26px;position:relative}
+.panel figcaption{position:relative;z-index:2}
+.panel figcaption strong{display:block;font-family:var(--serif);font-size:1.35rem;font-weight:600}
+.panel figcaption span{color:var(--soft);font-size:.9rem}
+.p1{grid-column:span 7;background:linear-gradient(150deg, rgba(11,15,26,.15), rgba(11,15,26,.88)), radial-gradient(600px 300px at 20% 10%, rgba(255,199,39,.35), transparent 60%), linear-gradient(140deg,#2A2114,#0F172A)}
+.p2{grid-column:span 5;background:linear-gradient(170deg, rgba(11,15,26,.1), rgba(11,15,26,.9)), radial-gradient(400px 260px at 80% 20%, rgba(245,158,11,.28), transparent 60%), linear-gradient(160deg,#1B2742,#0B0F1A)}
+.p3{grid-column:span 5;background:linear-gradient(170deg, rgba(11,15,26,.1), rgba(11,15,26,.9)), repeating-linear-gradient(45deg, rgba(245,238,220,.05) 0 2px, transparent 2px 18px), linear-gradient(150deg,#241A0E,#10182B)}
+.p4{grid-column:span 7;background:linear-gradient(150deg, rgba(11,15,26,.2), rgba(11,15,26,.9)), radial-gradient(700px 320px at 70% 0%, rgba(255,199,39,.22), transparent 55%), linear-gradient(140deg,#131E36,#0B0F1A)}
+.panel .num{position:absolute;top:20px;right:24px;font-family:var(--serif);font-style:italic;color:rgba(245,238,220,.55);font-size:1rem;z-index:2}
+@media(max-width:860px){.p1,.p2,.p3,.p4{grid-column:span 12}}
+
+/* Visit */
+.visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:52px}
+@media(max-width:860px){.visit-grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:36px}
+.card h3{font-family:var(--serif);font-size:1.5rem;font-weight:600;margin-bottom:18px}
+.hours{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);color:var(--soft);font-size:.95rem}
+.hours:last-child{border-bottom:0}
+.hours strong{color:var(--cream);font-weight:600}
+.card p{color:var(--soft)}
+.card p + p{margin-top:14px}
+.card .gold{color:var(--gold2)}
+
+/* Footer */
+footer{padding:64px 5vw 40px;border-top:1px solid var(--line);background:#090D16}
+.foot-wrap{max-width:1180px;margin:0 auto}
+.foot-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:28px;padding-bottom:34px;border-bottom:1px solid var(--line)}
+.foot-brand{font-family:var(--serif);font-size:2rem}
+.foot-brand span{color:var(--gold)}
+.foot-links{display:flex;gap:26px;font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);align-items:center}
+.foot-links a:hover{color:var(--gold2)}
+.foot-note{padding-top:26px;color:var(--muted);font-size:.88rem;display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px}
+@media(max-width:640px){section{padding:76px 5vw}.hero{padding-top:100px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header class="nav" id="topnav">
+  <a class="logo" href="#top">Velvet <span>Hour</span></a>
+  <nav class="nav-links" aria-label="Main">
+    <a href="#story">Story</a>
+    <a href="#menu">Menu</a>
+    <a href="#gallery">The Room</a>
+    <a href="#visit">Visit</a>
+  </nav>
+  <a class="nav-cta" href="#visit">Reserve a Table</a>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-lines"></div>
+    <div class="hero-orb" data-parallax="0.18"></div>
+    <div class="hero-ring" data-parallax="0.08"></div>
+    <span class="badge">Concept</span>
+    <p class="eyebrow">A cocktail room for the late hours</p>
+    <h1>Velvet<br><em>Hour</em></h1>
+    <p class="hero-sub">The lights drop, the ice is cut by hand, and the first pour lands exactly when the city exhales. Velvet Hour is a small room built around one idea: a great drink should feel like a scene you'll remember.</p>
+    <div class="hero-actions">
+      <a class="btn btn-gold" href="#menu">See the Menu</a>
+      <a class="btn btn-ghost" href="#story">Our Story</a>
+    </div>
+    <div class="hero-meta">
+      <div><strong>Open late</strong> Tue to Sat, until 1 am</div>
+      <div><strong>32 seats</strong> Walk ins at the bar</div>
+      <div><strong>Seasonal menu</strong> Twelve drinks, no filler</div>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <section class="story" id="story">
+    <div class="wrap story-grid">
+      <div class="story-copy reveal">
+        <p class="kicker">Our Story</p>
+        <h2>Built slowly,<br>poured <em>with intent.</em></h2>
+        <p>Velvet Hour started as a simple frustration. Too many bars chased spectacle, and too few cared about the quiet details: the weight of the glass, the temperature of the pour, the pause before the first sip.</p>
+        <p>So we imagined the opposite. <strong>A room that slows you down.</strong> Dark wood tones, low light, vinyl on the speakers, and a short menu where every drink earns its place. Nothing is there to impress you fast. It's there to stay with you.</p>
+        <p>Our bartenders work like editors. They cut what's unnecessary, they keep what matters, and they taste everything twice before it reaches the bar. If a drink can't be explained in one honest sentence, it doesn't make the list.</p>
+        <blockquote class="pull">"We don't chase trends here. We chase the moment a table goes quiet after the first sip."</blockquote>
+      </div>
+      <div class="type-panel reveal d1" aria-hidden="true">
+        <div class="big">Ice.<br>Light.<br><span>Time.</span></div>
+        <div class="row"><span>Est. as a concept</span><span>Room No. 01</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section id="menu">
+    <div class="wrap">
+      <div class="reveal">
+        <p class="kicker">Signature Menu</p>
+        <h2>Twelve seats at the bar,<br>six drinks we're <em>proud of.</em></h2>
+        <p class="lead">A fictional signature list for this concept. Prices and recipes are illustrative, written to show tone, pacing, and how a short menu can still feel complete.</p>
+      </div>
+      <div class="menu-list">
+        <article class="drink reveal">
+          <span class="no">01</span>
+          <div>
+            <h3>The Velvet Old Fashioned</h3>
+            <p>Rye whiskey, demerara, aromatic bitters, and a single hand cut cube. Stirred long, finished with expressed orange oils.</p>
+            <div class="tags"><span class="tag">Spirit forward</span><span class="tag">House classic</span></div>
+          </div>
+          <span class="price">$18</span>
+        </article>
+        <article class="drink reveal">
+          <span class="no">02</span>
+          <div>
+            <h3>Midnight Orchard</h3>
+            <p>Calvados style apple spirit, amaro, lemon, and a whisper of smoked honey. Bright at first, darker as it opens.</p>
+            <div class="tags"><span class="tag">Orchard</span><span class="tag">Bittersweet</span></div>
+          </div>
+          <span class="price">$17</span>
+        </article>
+        <article class="drink reveal">
+          <span class="no">03</span>
+          <div>
+            <h3>Golden Hour Spritz</h3>
+            <p>Dry vermouth, elderflower, sparkling wine, and grapefruit. The lightest drink on the list, and the one that disappears fastest.</p>
+            <div class="tags"><span class="tag">Low ABV feel</span><span class="tag">Aperitif</span></div>
+          </div>
+          <span class="price">$15</span>
+        </article>
+        <article class="drink reveal">
+          <span class="no">04</span>
+          <div>
+            <h3>Smoke and Cedar</h3>
+            <p>Mezcal style agave spirit, cedar rested syrup, lime, and black salt. Earthy, dry, and unapologetically bold.</p>
+            <div class="tags"><span class="tag">Smoky</span><span class="tag">Dry</span></div>
+          </div>
+          <span class="price">$19</span>
+        </article>
+        <article class="drink reveal">
+          <span class="no">05</span>
+          <div>
+            <h3>The Quiet Martini</h3>
+            <p>Gin, dry vermouth, olive brine in drops, not splashes, served ice cold in a small glass. Clean, precise, and gone too soon.</p>
+            <div class="tags"><span class="tag">Classic</span><span class="tag">Ice cold</span></div>
+          </div>
+          <span class="price">$18</span>
+        </article>
+        <article class="drink reveal">
+          <span class="no">06</span>
+          <div>
+            <h3>Afterglow, Zero Proof</h3>
+            <p>Seedlip style botanical spirit, blood orange, tonic, and rosemary smoke under the glass. All the ritual, none of the proof.</p>
+            <div class="tags"><span class="tag">Zero proof</span><span class="tag">Citrus</span></div>
+          </div>
+          <span class="price">$12</span>
+        </article>
+      </div>
+      <p class="menu-note reveal">Can't decide? Tell the bartender one word, bitter, bright, smoky, or soft, and they'll build from there.</p>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery" id="gallery">
+    <div class="wrap">
+      <div class="reveal">
+        <p class="kicker">The Room</p>
+        <h2>Low light,<br>long <em>shadows.</em></h2>
+        <p class="lead">No photos, by design. These panels are typographic studies of the room itself, so the mood carries even before you step inside.</p>
+      </div>
+      <div class="gal-grid">
+        <figure class="panel p1 reveal"><span class="num">I.</span><figcaption><strong>The Bar</strong><span>Twelve feet of dark timber, brass rail, and bottles kept low so faces stay in view.</span></figcaption></figure>
+        <figure class="panel p2 reveal d1"><span class="num">II.</span><figcaption><strong>The Ice Program</strong><span>Clear cubes cut nightly, because dilution is an ingredient too.</span></figcaption></figure>
+        <figure class="panel p3 reveal"><span class="num">III.</span><figcaption><strong>The Listening Corner</strong><span>Two chairs, a record player, and no speakers overhead. Just vinyl, played whole.</span></figcaption></figure>
+        <figure class="panel p4 reveal d1"><span class="num">IV.</span><figcaption><strong>The Last Pour</strong><span>At midnight the menu shortens to four drinks. The room gets quieter, and better.</span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISIT -->
+  <section id="visit">
+    <div class="wrap">
+      <div class="reveal">
+        <p class="kicker">Visit Us</p>
+        <h2>Find the door<br>with the <em>amber light.</em></h2>
+        <p class="lead">We're a concept, so this address is illustrative. In a real room, you'd look for a small unmarked door, a warm light above it, and music you can just barely hear from the street.</p>
+      </div>
+      <div class="visit-grid">
+        <div class="card reveal">
+          <h3>Hours</h3>
+          <div class="hours"><span>Tuesday to Thursday</span><strong>6 pm to 12 am</strong></div>
+          <div class="hours"><span>Friday to Saturday</span><strong>6 pm to 1 am</strong></div>
+          <div class="hours"><span>Sunday</span><strong>5 pm to 11 pm</strong></div>
+          <div class="hours"><span>Monday</span><strong>Closed, for prep</strong></div>
+        </div>
+        <div class="card reveal d1">
+          <h3>Location and Tables</h3>
+          <p><span class="gold">Velvet Hour</span><br>14 Lantern Row, Old Market District<br>A fictional address, shown for layout</p>
+          <p>Tables for two to six guests. The bar is first come, first served, and large groups are asked to book ahead so the room stays calm.</p>
+          <p>Dress is simple: come as you are, stay as long as the conversation lasts.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="foot-wrap">
+    <div class="foot-top">
+      <div class="foot-brand">Velvet <span>Hour</span></div>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="#story">Story</a>
+        <a href="#menu">Menu</a>
+        <a href="#visit">Visit</a>
+      </nav>
+    </div>
+    <div class="foot-note">
+      <span>Concept website - designed & built by AlphaFlux AI (Gul Sehar) as a design showcase.</span>
+      <span>Velvet Hour is a fictional brand.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var nav=document.getElementById('topnav');
+  var layers=document.querySelectorAll('[data-parallax]');
+  function onScroll(){
+    var y=window.scrollY||0;
+    nav.classList.toggle('scrolled', y>40);
+    if(y<window.innerHeight*1.2){
+      layers.forEach(function(el){
+        var s=parseFloat(el.getAttribute('data-parallax'))||0.1;
+        el.style.transform='translateY('+(y*s)+'px)';
+      });
+    }
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CommentFlow — Comment-to-Customer Studio | AlphaFlux AI</title>
+<meta name="description" content="CommentFlow designs and simulates comment-to-DM sales flows for Instagram and Facebook: keyword triggers, rotating public replies, DM conversations that capture leads — test everything before you connect your real page.">
+<style>
+  :root{
+    --bg:#0a0a0b; --panel:#131315; --panel2:#1a1a1e; --line:#26262b;
+    --gold:#d4af37; --gold2:#f0d060; --text:#f4f1e8; --muted:#9b978c;
+    --green:#3fb96f; --red:#e5484d; --radius:16px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--bg); color:var(--text); font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; min-height:100vh}
+  header{display:flex; align-items:center; justify-content:space-between; padding:18px 28px; border-bottom:1px solid var(--line); flex-wrap:wrap; gap:10px}
+  .logo{display:flex; align-items:center; gap:12px; font-weight:800; font-size:20px}
+  .logo-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#8a6d1f);display:grid;place-items:center;color:#0a0a0b;font-size:18px}
+  .badge{font-size:11px; color:#0a0a0b; background:var(--gold); padding:3px 9px; border-radius:999px; font-weight:700}
+  .by{color:var(--muted); font-size:13px}
+  main{max-width:1220px; margin:0 auto; padding:24px 20px 60px}
+  .hero h1{font-size:30px; line-height:1.15; font-weight:800}
+  .hero h1 span{color:var(--gold)}
+  .hero p{color:var(--muted); margin-top:8px; max-width:760px; font-size:15px; line-height:1.55}
+  .tabs{display:flex; gap:8px; margin:22px 0 16px; flex-wrap:wrap}
+  .tab{padding:10px 18px; border-radius:999px; border:1px solid var(--line); background:var(--panel2); color:var(--text); font-weight:700; font-size:14px; cursor:pointer}
+  .tab.active{background:var(--gold); color:#0a0a0b; border-color:var(--gold)}
+  .panel{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:18px}
+  .panel h3{font-size:13px; text-transform:uppercase; letter-spacing:1px; color:var(--gold); margin-bottom:14px}
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}}
+  .field{margin-bottom:12px}
+  .field label{display:block; font-size:12px; color:var(--muted); margin-bottom:5px}
+  .field input,.field select,.field textarea{width:100%; background:var(--panel2); border:1px solid var(--line); color:var(--text); border-radius:9px; padding:9px; font-size:13px; font-family:inherit}
+  button{border:1px solid var(--line); background:var(--panel2); color:var(--text); padding:9px 14px; border-radius:10px; font-size:13px; font-weight:600; cursor:pointer}
+  button:hover{border-color:var(--gold)}
+  button.primary{background:linear-gradient(135deg,var(--gold),#a8842a); color:#0a0a0b; border:none}
+  button.small{padding:6px 10px; font-size:12px}
+  .hint{font-size:12px; color:var(--muted); line-height:1.55; margin-top:8px}
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-bottom:16px}
+  .stat{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px}
+  .stat .num{font-size:26px; font-weight:800}
+  .stat .lbl{color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.7px; margin-top:3px}
+  /* Simulator */
+  .sim{display:grid; grid-template-columns:1fr 340px; gap:20px; align-items:start}
+  @media(max-width:950px){.sim{grid-template-columns:1fr}}
+  .post{background:#fff; color:#111; border-radius:14px; overflow:hidden}
+  .post-head{display:flex; gap:10px; align-items:center; padding:12px 14px}
+  .avatar{width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg,var(--gold),#8a6d1f); display:grid; place-items:center; font-weight:800; color:#0a0a0b}
+  .post-img{height:190px; background:linear-gradient(135deg,#26262b,#0a0a0b); display:grid; place-items:center; color:var(--gold2); font-size:15px; padding:20px; text-align:center; line-height:1.5}
+  .post-cap{padding:12px 14px; font-size:14px; line-height:1.55; white-space:pre-wrap}
+  .comments{padding:0 14px 14px}
+  .comment{font-size:13px; padding:8px 0; border-top:1px solid #eee; line-height:1.5}
+  .comment b{margin-right:6px}
+  .reply{margin:6px 0 2px 18px; background:#f4f1e8; border-left:3px solid var(--gold); padding:7px 10px; border-radius:8px; font-size:13px}
+  .dmchip{display:inline-block; background:var(--green); color:#fff; font-size:11px; font-weight:700; padding:2px 8px; border-radius:99px; margin-left:8px; cursor:pointer}
+  .cinput{display:flex; gap:8px; padding:12px 14px; border-top:1px solid #eee}
+  .cinput input{flex:1; border:1px solid #ddd; border-radius:99px; padding:9px 14px; font-size:13px}
+  .cinput button{background:#111; color:#fff; border:none; border-radius:99px}
+  .phone{background:#0f0f10; border:1px solid var(--line); border-radius:28px; padding:14px; height:600px; display:flex; flex-direction:column}
+  .phone-head{text-align:center; padding-bottom:10px; border-bottom:1px solid var(--line); font-size:13px}
+  .phone-head b{display:block; font-size:14px}
+  .thread{flex:1; overflow:auto; padding:12px 2px; display:flex; flex-direction:column; gap:8px}
+  .msg{max-width:82%; padding:9px 12px; border-radius:16px; font-size:13px; line-height:1.5; white-space:pre-wrap}
+  .msg.bot{background:var(--panel2); border:1px solid var(--line); align-self:flex-start; border-bottom-left-radius:4px}
+  .msg.me{background:var(--gold); color:#0a0a0b; align-self:flex-end; border-bottom-right-radius:4px; font-weight:600}
+  .msg.sys{background:none; color:var(--muted); align-self:center; font-size:11px; text-align:center}
+  .quickrow{display:flex; gap:6px; flex-wrap:wrap; margin-top:2px}
+  .quickrow button{border-radius:99px; border-color:var(--gold); color:var(--gold2); font-size:12px; padding:7px 12px}
+  .phone-input{display:flex; gap:8px; border-top:1px solid var(--line); padding-top:10px}
+  .phone-input input{flex:1; background:var(--panel2); border:1px solid var(--line); color:var(--text); border-radius:99px; padding:9px 14px; font-size:13px}
+  .typing{color:var(--muted); font-size:12px; font-style:italic; padding:2px 6px}
+  /* Leads */
+  .lead{border:1px solid var(--line); background:var(--panel2); border-radius:12px; padding:14px; margin-bottom:10px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap}
+  .lead .meta{color:var(--muted); font-size:12px; margin-top:3px; line-height:1.5}
+  .pill{font-size:11px; font-weight:800; padding:3px 9px; border-radius:99px; background:rgba(212,175,55,.15); color:var(--gold2); border:1px solid var(--gold)}
+  .tpl{border:1px solid var(--line); background:var(--panel2); border-radius:12px; padding:16px; cursor:pointer}
+  .tpl:hover{border-color:var(--gold)}
+  .tpl h4{font-size:15px; margin-bottom:6px}
+  .tpl p{color:var(--muted); font-size:13px; line-height:1.55}
+  .check{font-size:14px; line-height:1.7; color:var(--text)}
+  .check li{margin-left:18px}
+  code{background:var(--panel2); border:1px solid var(--line); border-radius:6px; padding:1px 6px; font-size:12px}
+  footer{border-top:1px solid var(--line); padding:20px 28px; color:var(--muted); font-size:13px; text-align:center}
+  .view{display:none} .view.active{display:block}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><div class="logo-mark">💬</div> CommentFlow <span class="badge">COMMENT → CUSTOMER</span></div>
+  <div class="by">Built by <b style="color:var(--gold2)">AlphaFlux AI</b> — design it, test it, then connect your page</div>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>They comment <span>“PRICE”</span>. Your page DMs them, answers, and captures the lead — while you sleep.</h1>
+    <p>CommentFlow is a studio for comment-to-DM sales flows on Instagram and Facebook. Build the flow, run it in the live simulator with a mock post and phone, watch leads land in your inbox — and only then connect the winning flow to your real page through an official tool. No risking a real page on an untested flow.</p>
+  </section>
+
+  <div class="tabs">
+    <button class="tab active" data-view="studio">🎛️ Flow Studio</button>
+    <button class="tab" data-view="simulator">📱 Live Simulator</button>
+    <button class="tab" data-view="leads">📥 Leads <span id="leadCount"></span></button>
+    <button class="tab" data-view="templates">🧩 Templates</button>
+    <button class="tab" data-view="golive">🚀 Go Live</button>
+  </div>
+
+  <!-- STUDIO -->
+  <section class="view active" id="view-studio">
+    <div class="stats" id="stats"></div>
+    <div class="panel">
+      <h3>Your flow</h3>
+      <div class="grid">
+        <div>
+          <div class="field"><label>Flow name</label><input id="fName"></div>
+          <div class="field"><label>Business / page name</label><input id="fBiz"></div>
+          <div class="field"><label>Platform</label><select id="fPlatform"><option>Instagram</option><option>Facebook</option></select></div>
+          <div class="field"><label>Trigger keywords (comma separated)</label><input id="fKeywords"></div>
+          <div class="field"><label>Business WhatsApp number (for “Chat on WhatsApp” + lead follow-ups, with country code)</label><input id="fWa" placeholder="923001234567"></div>
+          <div class="field"><label>Post caption (shown in the simulator)</label><textarea id="fCaption" rows="3"></textarea></div>
+        </div>
+        <div>
+          <div class="field"><label>Public replies — one per line, they rotate so replies never look copy-pasted</label><textarea id="fReplies" rows="4"></textarea></div>
+          <div class="field"><label>DM greeting</label><textarea id="fGreeting" rows="2"></textarea></div>
+          <div class="field"><label>DM details (price / offer / what's included)</label><textarea id="fBody" rows="3"></textarea></div>
+          <div class="field"><label>Link to send in the DM (booking page, product, freebie)</label><input id="fLink"></div>
+          <div class="field"><label>Services the lead can pick (comma separated)</label><input id="fServices"></div>
+          <div class="field"><label>Reply when a comment has NO keyword (leave empty = stay silent)</label><input id="fFallback"></div>
+        </div>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:6px">
+        <button class="primary" id="btnSave">Save flow</button>
+        <button id="btnToSim">▶ Test in simulator</button>
+        <button id="btnCopyJson">Copy flow as JSON</button>
+        <button id="btnResetStats">Reset stats + leads</button>
+      </div>
+      <p class="hint">Ban-safe by design: rotating replies, human delays in the simulator, and go-live only through official Meta-approved tools — never a personal-profile bot.</p>
+    </div>
+  </section>
+
+  <!-- SIMULATOR -->
+  <section class="view" id="view-simulator">
+    <div class="sim">
+      <div>
+        <div class="post">
+          <div class="post-head"><div class="avatar" id="simAvatar">A</div>
+            <div><b id="simBiz">Your Business</b><div style="color:#666; font-size:12px" id="simPlatform">Instagram · Sponsored post</div></div></div>
+          <div class="post-img" id="simHook">Your post creative shows here.<br>Comment the keyword below to trigger the flow 👇</div>
+          <div class="post-cap" id="simCaption"></div>
+          <div class="comments" id="comments"></div>
+          <div class="cinput">
+            <input id="visitorName" placeholder="Visitor name" style="max-width:130px; flex:none">
+            <input id="commentText" placeholder="Write a comment… try the keyword">
+            <button id="btnComment">Post</button>
+          </div>
+        </div>
+        <p class="hint" style="margin-top:10px">Act as different visitors: comment with the keyword to trigger a DM, then open the DM on the phone and tap through it like a customer. Leads you capture land in the Leads tab.</p>
+      </div>
+      <div class="phone">
+        <div class="phone-head"><b id="phoneBiz">DMs</b><span style="color:var(--muted)" id="phoneWith">Pick a “DM sent” comment to open the conversation</span></div>
+        <div class="thread" id="thread"><div class="msg sys">No conversation open yet.<br>Comment with the keyword on the post first.</div></div>
+        <div class="phone-input">
+          <input id="dmInput" placeholder="Reply as the visitor…">
+          <button class="primary" id="btnDmSend">Send</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEADS -->
+  <section class="view" id="view-leads">
+    <div class="panel">
+      <h3>Captured leads</h3>
+      <div style="display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap">
+        <button class="primary" id="btnCsv">⬇ Export CSV</button>
+        <button id="btnClearLeads">Clear leads</button>
+      </div>
+      <div id="leadList"></div>
+    </div>
+  </section>
+
+  <!-- TEMPLATES -->
+  <section class="view" id="view-templates">
+    <div class="grid" id="tplGrid"></div>
+    <p class="hint" style="margin-top:12px">Templates load into the Studio — edit the prices and links, save, then test in the simulator.</p>
+  </section>
+
+  <!-- GO LIVE -->
+  <section class="view" id="view-golive">
+    <div class="panel">
+      <h3>From simulator to a real page — the safe way</h3>
+      <ol class="check">
+        <li><b>Design + test here first.</b> Run your flow in the simulator until the DM conversation feels human — short lines, one question at a time, easy exit.</li>
+        <li><b>Connect through an official tool only</b> — GoHighLevel workflows or ManyChat, both Meta-approved. Never automate a personal profile; that is what gets accounts banned.</li>
+        <li><b>Recreate the flow there</b> using the exact texts from your Studio (use “Copy flow as JSON” to carry everything over).</li>
+        <li><b>Keep the ban-safe habits:</b> rotate at least 3 public replies, add a small delay before the DM, one keyword per post, no public links in the caption (the link lives in the DM).</li>
+        <li><b>Send every captured lead to WhatsApp</b> — the Leads tab gives you a one-tap WhatsApp follow-up with a pre-written message, because DMs go cold and WhatsApp closes.</li>
+      </ol>
+      <p class="hint">Why a studio first? A broken flow on a real page burns your one viral post. A tested flow turns it into customers. CommentFlow is the rehearsal room; GHL/ManyChat is the stage.</p>
+    </div>
+  </section>
+</main>
+
+<footer>CommentFlow — a portfolio product by AlphaFlux AI · Simulator + flow studio · Live sending runs through official Meta-approved tools</footer>
+
+<script>
+(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const KEY = "commentflow_v1";
+
+  const DEFAULT_FLOW = {
+    name: "Dental — price keyword", biz: "BrightSmile Dental", platform: "Instagram",
+    keywords: "PRICE, TEETH, COST", wa: "",
+    caption: "POV: you finally fix the smile you hide in photos ✨\nTeeth whitening — one session, visible results.\nComment PRICE and I will DM you the full details + booking link 👇",
+    replies: "Just sent you the details in DM 💬 check your inbox!\nDone! Price + booking link is in your DMs ✨\nCheck your messages — everything is there 💛",
+    greeting: "Hi! Thanks for commenting PRICE 💛 Here is everything about our teeth whitening:",
+    body: "🦷 Teeth Whitening — one session (60 min)\nPrice: $99 (launch offer, normally $149)\nIncludes consultation + aftercare kit.\nSlots this week are limited.",
+    link: "https://calendly.com/your-clinic/whitening",
+    services: "Teeth Whitening, Cleaning, Braces Consult, Implants Consult",
+    fallback: ""
+  };
+
+  const TEMPLATES = [
+    { key:"dental", icon:"🦷", title:"Dental / Clinic — PRICE", desc:"Whitening, cleaning, consults. Keyword PRICE → DM with price + Calendly booking + lead capture.", flow: DEFAULT_FLOW },
+    { key:"medspa", icon:"✨", title:"Medspa / Salon — GLOW", desc:"Facials and treatments. Keyword GLOW → treatment menu, prices and a booking ask.", flow: {
+      name:"Medspa — glow keyword", biz:"LuxeSkin Medspa", platform:"Instagram", keywords:"GLOW, FACIAL, PRICE", wa:"",
+      caption:"Your skin, but make it glass ✨ Signature facial results in one sitting.\nComment GLOW for the menu + this week's offer 👇",
+      replies:"Sent! Check your DMs for the glow menu ✨\nDone 💛 details are in your inbox!\nJust DM'd you — have a look 💬",
+      greeting:"Hi gorgeous! Thanks for commenting GLOW ✨ Here is our signature facial menu:",
+      body:"✨ Signature Facial — 75 min\nPrice: $79 (first visit, normally $120)\nDeep cleanse + hydration + glow finish.\nThis week's offer ends Sunday.",
+      link:"https://calendly.com/your-medspa/facial", services:"Signature Facial, HydraFacial, Chemical Peel, Consultation", fallback:"" } },
+    { key:"shop", icon:"🛍️", title:"Instagram Shop — PRICE", desc:"Product posts. Keyword PRICE → price, sizes, order on WhatsApp. Built for boutiques and resellers.", flow: {
+      name:"Boutique — price keyword", biz:"Noor Boutique", platform:"Instagram", keywords:"PRICE, ORDER, BUY", wa:"",
+      caption:"New drop 🔥 Embroidered 2-piece, all sizes restocked.\nComment PRICE — I will DM you the price + how to order 👇",
+      replies:"Price sent to your DMs 🛍️ check please!\nDone! Details in your inbox 💛\nJust messaged you the price + sizes ✨",
+      greeting:"Hi! Thanks for your comment 🛍️ Here are the details for this piece:",
+      body:"👗 Embroidered 2-Piece\nPrice: Rs 4,850 (free delivery this week)\nSizes: S / M / L — all in stock\nCash on delivery available.",
+      link:"", services:"Order this piece, Ask about sizes, Wholesale query", fallback:"" } },
+    { key:"coach", icon:"🎁", title:"Coach / Creator — GUIDE (free guide)", desc:"Your playbook: free library in exchange for the comment. Keyword GUIDE → DM the freebie, capture WhatsApp for the upsell.", flow: {
+      name:"Free guide — guide keyword", biz:"AI with Sehar", platform:"Facebook", keywords:"GUIDE, FREE, LIBRARY", wa:"",
+      caption:"I turned my full AI tools library into one free guide 📚\nComment GUIDE and I will send it to your inbox 👇",
+      replies:"Guide sent! Check your DMs 📚\nDone — the library link is in your messages ✨\nJust sent it 💛 enjoy!",
+      greeting:"Hi! Thanks for commenting GUIDE 📚 Here is your free AI tools library:",
+      body:"📚 The Free AI Tools Library\n50+ tools I actually use, organised by task — content, video, automation, design.\nI add new tools every week.",
+      link:"https://your-link.com/free-library", services:"Just the free guide, 1:1 Mentoring, Done-for-you setup", fallback:"" } },
+    { key:"realestate", icon:"🏠", title:"Real Estate — INFO", desc:"Listing posts. Keyword INFO → full details + viewing booking + phone capture.", flow: {
+      name:"Real estate — info keyword", biz:"Prime Properties", platform:"Facebook", keywords:"INFO, DETAILS, VIEWING", wa:"",
+      caption:"Just listed 🏠 3-bed apartment, ready to move in.\nComment INFO for price, full details and viewing slots 👇",
+      replies:"Details sent to your DMs 🏠\nDone! Price + viewing slots in your inbox ✨\nCheck your messages 💬",
+      greeting:"Hi! Thanks for commenting INFO 🏠 Here are the full details:",
+      body:"🏠 3-Bed Apartment — 1,850 sq ft\nPrice on the listing page below.\nViewings: Sat + Sun, 11am–5pm.\nFinancing guidance available.",
+      link:"https://your-link.com/listing", services:"Book a viewing, Price details, Similar listings", fallback:"" } },
+    { key:"restaurant", icon:"🍔", title:"Restaurant / Cafe — MENU", desc:"Food posts. Keyword MENU → menu link, today's deal, table/order capture.", flow: {
+      name:"Restaurant — menu keyword", biz:"Burger Barn", platform:"Instagram", keywords:"MENU, DEAL, ORDER", wa:"",
+      caption:"The smash burger everyone is talking about 🍔\nComment MENU — full menu + today's deal in your DMs 👇",
+      replies:"Menu sent! Check your DMs 🍔\nDone — today's deal is in your inbox 🔥\nJust DM'd you the menu 💛",
+      greeting:"Hey foodie! Thanks for commenting MENU 🍔 Here you go:",
+      body:"🍔 Today's deal: Buy 1 Smash Burger, get fries FREE\nFull menu at the link below.\nDelivery + takeaway, 12pm–12am.",
+      link:"https://your-link.com/menu", services:"Order delivery, Book a table, Catering query", fallback:"" } }
+  ];
+
+  let store = load();
+  function load(){
+    try{ const raw = localStorage.getItem(KEY); if(raw) return JSON.parse(raw); }catch(_){}
+    return { flow: Object.assign({}, DEFAULT_FLOW), leads: [], stats: { comments:0, matched:0, dms:0, leads:0 } };
+  }
+  function save(){ localStorage.setItem(KEY, JSON.stringify(store)); }
+  const flow = () => store.flow;
+  const esc = s => String(s==null?"":s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const keywords = () => flow().keywords.split(",").map(k=> k.trim().toUpperCase()).filter(Boolean);
+  const replyPool = () => flow().replies.split("\n").map(r=> r.trim()).filter(Boolean);
+  const services = () => flow().services.split(",").map(s=> s.trim()).filter(Boolean);
+
+  // ---------- Tabs ----------
+  document.querySelectorAll(".tab").forEach(t=> t.addEventListener("click", ()=>{
+    document.querySelectorAll(".tab").forEach(x=> x.classList.remove("active"));
+    document.querySelectorAll(".view").forEach(x=> x.classList.remove("active"));
+    t.classList.add("active"); $("view-" + t.dataset.view).classList.add("active");
+    if(t.dataset.view === "simulator") syncSim();
+    if(t.dataset.view === "leads") renderLeads();
+    if(t.dataset.view === "studio") renderStats();
+  }));
+  function goto(view){ document.querySelector('.tab[data-view="' + view + '"]').click(); }
+
+  // ---------- Studio ----------
+  function fillForm(f){
+    $("fName").value = f.name||""; $("fBiz").value = f.biz||""; $("fPlatform").value = f.platform||"Instagram";
+    $("fKeywords").value = f.keywords||""; $("fWa").value = f.wa||""; $("fCaption").value = f.caption||"";
+    $("fReplies").value = f.replies||""; $("fGreeting").value = f.greeting||""; $("fBody").value = f.body||"";
+    $("fLink").value = f.link||""; $("fServices").value = f.services||""; $("fFallback").value = f.fallback||"";
+  }
+  function readForm(){
+    return { name:$("fName").value, biz:$("fBiz").value, platform:$("fPlatform").value, keywords:$("fKeywords").value,
+      wa:$("fWa").value.replace(/\D/g,""), caption:$("fCaption").value, replies:$("fReplies").value,
+      greeting:$("fGreeting").value, body:$("fBody").value, link:$("fLink").value, services:$("fServices").value, fallback:$("fFallback").value };
+  }
+  $("btnSave").addEventListener("click", ()=>{ store.flow = readForm(); save(); renderStats(); alert("Flow saved. Test it in the simulator."); });
+  $("btnToSim").addEventListener("click", ()=>{ store.flow = readForm(); save(); goto("simulator"); });
+  $("btnCopyJson").addEventListener("click", async ()=>{
+    try{ await navigator.clipboard.writeText(JSON.stringify(readForm(), null, 2)); alert("Flow JSON copied — paste it into your notes or hand it to whoever sets up GHL/ManyChat."); }catch(_){ alert("Copy failed in this browser."); }
+  });
+  $("btnResetStats").addEventListener("click", ()=>{ store.leads = []; store.stats = {comments:0, matched:0, dms:0, leads:0}; save(); renderStats(); renderLeads(); });
+  function renderStats(){
+    const s = store.stats;
+    const conv = s.dms ? Math.round(s.leads / s.dms * 100) : 0;
+    $("stats").innerHTML =
+      stat(s.comments, "Comments (sim)") + stat(s.matched, "Keyword matches") +
+      stat(s.dms, "DMs started") + stat(s.leads, "Leads captured") + stat(conv + "%", "DM → lead");
+    $("leadCount").textContent = store.leads.length ? "(" + store.leads.length + ")" : "";
+  }
+  function stat(n, l){ return `<div class="stat"><div class="num">${n}</div><div class="lbl">${l}</div></div>`; }
+
+  // ---------- Simulator ----------
+  let threads = {};   // visitorName -> {stage, lead:{}, opened}
+  let currentVisitor = null;
+  let replyIdx = 0;
+
+  function syncSim(){
+    $("simBiz").textContent = flow().biz || "Your Business";
+    $("simAvatar").textContent = (flow().biz || "Y").trim().charAt(0).toUpperCase();
+    $("simPlatform").textContent = flow().platform + " · Post";
+    $("simCaption").textContent = flow().caption;
+    $("phoneBiz").textContent = flow().biz + " · DMs";
+  }
+  function matchKeyword(text){
+    const t = " " + text.toUpperCase().replace(/[^A-Z0-9 ]/g, " ") + " ";
+    return keywords().find(k=> t.includes(" " + k + " ")) || null;
+  }
+  $("btnComment").addEventListener("click", postComment);
+  $("commentText").addEventListener("keydown", e=>{ if(e.key === "Enter") postComment(); });
+
+  function postComment(){
+    const name = $("visitorName").value.trim() || "Visitor";
+    const text = $("commentText").value.trim();
+    if(!text) return;
+    $("commentText").value = "";
+    store.stats.comments++;
+    const kw = matchKeyword(text);
+    const div = document.createElement("div");
+    div.className = "comment";
+    div.innerHTML = `<b>${esc(name)}</b>${esc(text)}`;
+    $("comments").appendChild(div);
+
+    if(kw){
+      store.stats.matched++;
+      const pool = replyPool();
+      const reply = pool.length ? pool[replyIdx++ % pool.length] : "Check your DMs!";
+      setTimeout(()=>{
+        const r = document.createElement("div");
+        r.className = "reply";
+        r.innerHTML = `<b>${esc(flow().biz)}</b> ${esc(reply)} <span class="dmchip" data-visitor="${esc(name)}">✉ DM sent — open</span>`;
+        div.appendChild(r);
+      }, 600);
+      startThread(name, kw);
+    } else if(flow().fallback){
+      setTimeout(()=>{
+        const r = document.createElement("div");
+        r.className = "reply";
+        r.innerHTML = `<b>${esc(flow().biz)}</b> ${esc(flow().fallback)}`;
+        div.appendChild(r);
+      }, 600);
+    }
+    save(); renderStats();
+  }
+  $("comments").addEventListener("click", e=>{
+    const chip = e.target.closest("[data-visitor]");
+    if(chip) openThread(chip.dataset.visitor);
+  });
+
+  function startThread(name, kw){
+    if(threads[name]) return;
+    threads[name] = { stage: "start", lead: { name: "", phone: "", service: "", keyword: kw, visitor: name }, msgs: [] };
+    store.stats.dms++;
+    pushMsg(name, "sys", "— DM conversation started —");
+    botSay(name, flow().greeting || "Hi! Thanks for commenting 💛");
+    setTimeout(()=> botSay(name,
+      "Tap a button and I will help you right away:",
+      ["📋 Send me the details", "📅 Book / Order", "💬 Chat on WhatsApp"]
+    ), 500);
+  }
+  function openThread(name){
+    currentVisitor = name;
+    $("phoneWith").textContent = "Chatting with " + name;
+    renderThread();
+  }
+  function pushMsg(visitor, who, text, buttons){
+    threads[visitor].msgs.push({ who, text, buttons: buttons || null });
+    if(currentVisitor === visitor) renderThread();
+  }
+  function botSay(visitor, text, buttons){ pushMsg(visitor, "bot", text, buttons); }
+  function renderThread(){
+    const th = threads[currentVisitor];
+    if(!th){ $("thread").innerHTML = `<div class="msg sys">No conversation open yet.</div>`; return; }
+    $("thread").innerHTML = th.msgs.map(m=>{
+      if(m.who === "sys") return `<div class="msg sys">${esc(m.text)}</div>`;
+      let html = `<div class="msg ${m.who}">${esc(m.text)}</div>`;
+      if(m.buttons) html += `<div class="quickrow">${m.buttons.map(b=> `<button data-act="${esc(b)}">${esc(b)}</button>`).join("")}</div>`;
+      return html;
+    }).join("");
+    $("thread").scrollTop = $("thread").scrollHeight;
+  }
+  $("thread").addEventListener("click", e=>{
+    const b = e.target.closest("[data-act]");
+    if(b && currentVisitor) handleAction(currentVisitor, b.dataset.act);
+  });
+  function visitorSay(text){ pushMsg(currentVisitor, "me", text); }
+  function typingThen(fn){ 
+    const t = document.createElement("div"); t.className = "typing"; t.textContent = flow().biz + " is typing…";
+    $("thread").appendChild(t); $("thread").scrollTop = $("thread").scrollHeight;
+    setTimeout(()=>{ t.remove(); fn(); }, 750);
+  }
+
+  function handleAction(visitor, act){
+    const th = threads[visitor];
+    visitorSay(act);
+    if(act.includes("details")){
+      typingThen(()=> botSay(visitor, flow().body + (flow().link ? "\n\n🔗 " + flow().link : ""), ["📅 Book / Order", "💬 Chat on WhatsApp"]));
+    } else if(act.includes("Book")){
+      th.stage = "ask_name";
+      typingThen(()=> botSay(visitor, "Perfect! What is your name?"));
+    } else if(act.includes("WhatsApp")){
+      const num = flow().wa;
+      botSay(visitor, num ? "Opening WhatsApp… if it does not open, message us here: https://wa.me/" + num : "Our WhatsApp number is not set yet — add it in the Flow Studio. Meanwhile, tap Book / Order and we will contact you.");
+      if(num) window.open("https://wa.me/" + num + "?text=" + encodeURIComponent("Hi! I came from your " + flow().platform + " post (" + th.lead.keyword + ")"), "_blank");
+      th.stage = "done";
+    }
+  }
+  $("btnDmSend").addEventListener("click", dmSend);
+  $("dmInput").addEventListener("keydown", e=>{ if(e.key === "Enter") dmSend(); });
+  function dmSend(){
+    const text = $("dmInput").value.trim();
+    if(!text || !currentVisitor) return;
+    $("dmInput").value = "";
+    const th = threads[currentVisitor];
+    visitorSay(text);
+    if(th.stage === "ask_name"){
+      th.lead.name = text; th.stage = "ask_phone";
+      typingThen(()=> botSay(currentVisitor, "Nice to meet you, " + text.split(" ")[0] + "! What is your WhatsApp number? That is where we confirm everything."));
+    } else if(th.stage === "ask_phone"){
+      th.lead.phone = text.replace(/\D/g, "");
+      const svcs = services();
+      if(svcs.length){ th.stage = "ask_service"; typingThen(()=> botSay(currentVisitor, "Last thing — what are you interested in?", svcs)); }
+      else { th.stage = "done"; finishLead(currentVisitor); }
+    } else if(th.stage === "ask_service"){
+      th.lead.service = text; th.stage = "done"; finishLead(currentVisitor);
+    } else {
+      typingThen(()=> botSay(currentVisitor, "Thanks! Tap Book / Order any time and I will grab your details, or keep asking here 💛"));
+    }
+  }
+  // service chips arrive as bot buttons but represent visitor choices:
+  $("thread").addEventListener("click", e=>{
+    const b = e.target.closest("[data-act]");
+    if(!b || !currentVisitor) return;
+    const th = threads[currentVisitor];
+    if(th.stage === "ask_service" && services().includes(b.dataset.act)){
+      e.stopImmediatePropagation();
+      th.lead.service = b.dataset.act; th.stage = "done";
+      visitorSay(b.dataset.act); finishLead(currentVisitor);
+    }
+  }, true);
+
+  function finishLead(visitor){
+    const th = threads[visitor];
+    botSay(visitor, "✅ Done, " + (th.lead.name.split(" ")[0] || "friend") + "! We have your details" + (th.lead.service ? " for: " + th.lead.service : "") + ". We will message you on WhatsApp shortly to confirm. Anything else, just reply here 💛");
+    store.leads.unshift({ id: Math.random().toString(36).slice(2,9), name: th.lead.name, phone: th.lead.phone,
+      service: th.lead.service, keyword: th.lead.keyword, visitor, flow: flow().name, platform: flow().platform,
+      status: "New", time: new Date().toLocaleString() });
+    store.stats.leads++;
+    save(); renderStats(); renderLeads();
+  }
+
+  // ---------- Leads ----------
+  function renderLeads(){
+    $("leadCount").textContent = store.leads.length ? "(" + store.leads.length + ")" : "";
+    $("leadList").innerHTML = store.leads.length ? store.leads.map(l=>{
+      const waText = encodeURIComponent("Hi " + (l.name.split(" ")[0] || "") + "! This is " + flow().biz + " — you commented " + l.keyword + " on our " + l.platform + " post" + (l.service ? " about: " + l.service : "") + ". Shall I confirm your booking?");
+      const waLink = l.phone ? "https://wa.me/" + l.phone + "?text=" + waText : null;
+      return `<div class="lead"><div><b>${esc(l.name || l.visitor)}</b> <span class="pill">${esc(l.keyword)}</span>
+        <div class="meta">📱 ${esc(l.phone || "—")} · 🎯 ${esc(l.service || "—")}<br>Flow: ${esc(l.flow)} · ${esc(l.platform)} · ${esc(l.time)}</div></div>
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+          <select data-status="${l.id}" style="background:var(--panel); color:var(--text); border:1px solid var(--line); border-radius:8px; padding:7px">
+            ${["New","Contacted","Booked","Lost"].map(s=> `<option ${s===l.status ? "selected" : ""}>${s}</option>`).join("")}
+          </select>
+          ${waLink ? `<a href="${waLink}" target="_blank" rel="noopener"><button class="small primary">💬 WhatsApp</button></a>` : ""}
+          <button class="small" data-del-lead="${l.id}">Delete</button>
+        </div></div>`;
+    }).join("") : `<p class="hint">No leads yet. Run the simulator: comment the keyword, open the DM, tap Book / Order.</p>`;
+  }
+  $("leadList").addEventListener("change", e=>{
+    const sel = e.target.closest("[data-status]");
+    if(sel){ const l = store.leads.find(x=> x.id === sel.dataset.status); if(l){ l.status = sel.value; save(); } }
+  });
+  $("leadList").addEventListener("click", e=>{
+    const del = e.target.closest("[data-del-lead]");
+    if(del){ store.leads = store.leads.filter(x=> x.id !== del.dataset.delLead); save(); renderLeads(); renderStats(); }
+  });
+  $("btnClearLeads").addEventListener("click", ()=>{ store.leads = []; save(); renderLeads(); renderStats(); });
+  $("btnCsv").addEventListener("click", ()=>{
+    const rows = [["Name","WhatsApp","Service","Keyword","Flow","Platform","Status","Captured"]];
+    store.leads.forEach(l=> rows.push([l.name, l.phone, l.service, l.keyword, l.flow, l.platform, l.status, l.time]));
+    const csv = rows.map(r=> r.map(c=> '"' + String(c==null?"":c).replace(/"/g,'""') + '"').join(",")).join("\n");
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([csv], {type:"text/csv"})); a.download = "commentflow-leads.csv"; a.click();
+    setTimeout(()=> URL.revokeObjectURL(a.href), 3000);
+  });
+
+  // ---------- Templates ----------
+  $("tplGrid").innerHTML = TEMPLATES.map((t,i)=>
+    `<div class="tpl" data-tpl="${i}"><h4>${t.icon} ${esc(t.title)}</h4><p>${esc(t.desc)}</p>
+     <p style="margin-top:8px; color:var(--gold2); font-size:12px; font-weight:700">LOAD TEMPLATE →</p></div>`).join("");
+  $("tplGrid").addEventListener("click", e=>{
+    const el = e.target.closest("[data-tpl]");
+    if(!el) return;
+    const t = TEMPLATES[parseInt(el.dataset.tpl, 10)];
+    store.flow = Object.assign({}, t.flow); save(); fillForm(store.flow); goto("studio"); renderStats();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  fillForm(flow());
+  renderStats(); renderLeads(); syncSim();
+})();
+</script>
+</body>
+</html>

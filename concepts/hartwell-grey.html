@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hartwell &amp; Grey Estates, Luxury Property Management</title>
+<meta name="description" content="Hartwell and Grey Estates is a concept luxury property management website, designed as an editorial design showcase.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-950:#081A33;
+  --navy-900:#0B213F;
+  --navy-800:#0F172A;
+  --navy-700:#16283F;
+  --gold:#F59E0B;
+  --gold-light:#FFC727;
+  --cream:#F7F1E6;
+  --white:#FFFFFF;
+  --muted:#C7CEDA;
+  --muted-2:#95A0B3;
+  --line:rgba(255,255,255,.14);
+  --serif:"Fraunces", Georgia, serif;
+  --sans:"Manrope", Arial, sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--navy-950);color:var(--white);line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+::selection{background:var(--gold);color:var(--navy-950)}
+.wrap{width:min(1180px,calc(100% - 48px));margin:0 auto}
+.eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-light)}
+.rule{width:56px;height:2px;background:var(--gold);margin:22px 0}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform .9s cubic-bezier(.22,.61,.36,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.12s}
+.reveal-delay-2{transition-delay:.24s}
+.reveal-delay-3{transition-delay:.36s}
+
+/* Header */
+header{position:fixed;inset:0 0 auto 0;z-index:50;transition:background .4s ease,border-color .4s ease;border-bottom:1px solid transparent}
+header.scrolled{background:rgba(8,26,51,.96);border-bottom-color:var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:20px 0}
+.brand{font-family:var(--serif);font-size:1.28rem;font-weight:600;letter-spacing:.02em;line-height:1.1}
+.brand span{display:block;font-family:var(--sans);font-size:.58rem;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:var(--gold-light);margin-top:5px}
+.nav-links{display:flex;gap:34px;font-size:.82rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.nav-links a{color:var(--muted);transition:color .3s ease}
+.nav-links a:hover{color:var(--white)}
+.nav-cta{border:1px solid var(--gold);color:var(--gold-light);padding:10px 18px;font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;transition:background .3s ease,color .3s ease}
+.nav-cta:hover{background:var(--gold);color:var(--navy-950)}
+
+/* Hero */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:150px 0 96px;overflow:hidden;background:linear-gradient(160deg,#0B213F 0%,#081A33 52%,#0F172A 100%)}
+.hero-art{position:absolute;inset:-12% 0 0 0;pointer-events:none;will-change:transform;background:
+  linear-gradient(90deg,transparent 0 72%,rgba(245,158,11,.10) 72% 72.15%,transparent 72.15%),
+  linear-gradient(0deg,transparent 0 78%,rgba(255,255,255,.05) 78% 78.12%,transparent 78.12%)}
+.hero-arch{position:absolute;right:-70px;bottom:-40px;width:min(46vw,560px);height:78vh;border:1px solid rgba(245,158,11,.30);border-bottom:none;border-radius:280px 280px 0 0;pointer-events:none}
+.hero-arch::before{content:"";position:absolute;inset:28px 28px 0 28px;border:1px solid rgba(255,255,255,.12);border-bottom:none;border-radius:240px 240px 0 0}
+.hero-arch::after{content:"HG";position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);font-family:var(--serif);font-size:clamp(5rem,11vw,9rem);color:rgba(255,255,255,.06);letter-spacing:.04em}
+.hero-inner{position:relative;z-index:2;max-width:760px}
+.concept-badge{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--gold);color:var(--gold-light);padding:7px 13px;font-size:.68rem;font-weight:800;letter-spacing:.28em;text-transform:uppercase;background:rgba(8,26,51,.55)}
+.concept-badge::before{content:"";width:7px;height:7px;background:var(--gold);border-radius:50%}
+.hero h1{font-family:var(--serif);font-size:clamp(3.4rem,8.4vw,7.2rem);font-weight:500;line-height:.98;letter-spacing:-.015em;margin:30px 0 8px}
+.hero h1 em{font-style:italic;font-weight:400;color:var(--gold-light)}
+.hero-sub{font-family:var(--serif);font-size:clamp(1.35rem,2.6vw,2rem);font-style:italic;color:var(--cream);line-height:1.35;max-width:620px;margin-top:18px}
+.hero-copy{color:var(--muted);font-size:1.05rem;max-width:560px;margin-top:22px}
+.hero-actions{display:flex;flex-wrap:wrap;gap:16px;margin-top:38px}
+.btn{display:inline-block;padding:15px 28px;font-size:.82rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;transition:background .3s ease,color .3s ease,border-color .3s ease}
+.btn-gold{background:var(--gold);color:var(--navy-950);border:1px solid var(--gold)}
+.btn-gold:hover{background:var(--gold-light);border-color:var(--gold-light)}
+.btn-outline{border:1px solid rgba(255,255,255,.38);color:var(--white)}
+.btn-outline:hover{border-color:var(--white);background:rgba(255,255,255,.06)}
+.hero-foot{display:flex;flex-wrap:wrap;gap:14px 42px;margin-top:64px;padding-top:26px;border-top:1px solid var(--line);max-width:680px}
+.hero-foot div strong{display:block;font-family:var(--serif);font-size:1.05rem;font-weight:600;color:var(--white)}
+.hero-foot div span{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2)}
+
+/* Marquee strip */
+.strip{background:var(--gold);color:var(--navy-950);overflow:hidden;padding:14px 0}
+.strip-track{display:flex;gap:0;width:max-content;animation:slide 30s linear infinite;font-family:var(--serif);font-size:1rem;font-style:italic;white-space:nowrap}
+.strip-track span{padding:0 26px}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* Sections */
+section{padding:112px 0}
+.section-head{max-width:720px;margin-bottom:56px}
+.section-head h2{font-family:var(--serif);font-size:clamp(2.2rem,4.6vw,3.6rem);font-weight:500;line-height:1.08;margin-top:16px}
+.section-head p{color:var(--muted);margin-top:18px;font-size:1.02rem;max-width:620px}
+
+/* Services */
+.services{background:var(--navy-800)}
+.service-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.service{background:var(--navy-800);padding:38px 30px 42px;min-height:320px;display:flex;flex-direction:column}
+.service-num{font-family:var(--serif);font-size:2rem;color:var(--gold);line-height:1}
+.service h3{font-family:var(--serif);font-size:1.45rem;font-weight:600;line-height:1.2;margin:44px 0 14px}
+.service p{color:var(--muted);font-size:.94rem}
+.service a{margin-top:auto;padding-top:28px;font-size:.76rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-light)}
+
+/* Showcase */
+.showcase{background:linear-gradient(180deg,var(--navy-950),#0A1E3A)}
+.property-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px}
+.property{border:1px solid var(--line);background:#0C2242;display:flex;flex-direction:column}
+.property-visual{position:relative;height:290px;overflow:hidden;display:flex;align-items:flex-end;padding:26px}
+.property-visual::before{content:attr(data-initials);position:absolute;right:18px;top:6px;font-family:var(--serif);font-size:7.5rem;line-height:1;color:rgba(255,255,255,.10)}
+.property-visual::after{content:"";position:absolute;left:26px;top:26px;width:44px;height:2px;background:var(--gold)}
+.v1{background:linear-gradient(150deg,#274B73,#0F2748 62%,#081A33)}
+.v2{background:linear-gradient(150deg,#5A4632,#24344E 58%,#0F172A)}
+.v3{background:linear-gradient(150deg,#33536B,#12283F 60%,#081A33)}
+.v4{background:linear-gradient(150deg,#4A3B55,#1D2E49 56%,#0B213F)}
+.property-tag{position:relative;z-index:2;font-size:.66rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-light);border:1px solid rgba(245,158,11,.6);padding:7px 11px;background:rgba(8,26,51,.62)}
+.property-body{padding:30px 30px 34px;display:flex;flex-direction:column;flex:1}
+.property-body h3{font-family:var(--serif);font-size:1.75rem;font-weight:600;line-height:1.15}
+.property-loc{color:var(--gold-light);font-size:.78rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;margin-top:8px}
+.property-body p{color:var(--muted);font-size:.95rem;margin-top:16px}
+.property-meta{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:auto;padding-top:26px;border-top:1px solid var(--line);margin-top:26px;color:var(--cream);font-size:.84rem}
+.property-meta span strong{color:var(--white)}
+.price-note{font-size:.78rem;color:var(--muted-2);font-style:italic;margin-top:14px}
+
+/* About */
+.about{background:var(--cream);color:var(--navy-950)}
+.about .eyebrow{color:#9A6200}
+.about-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:70px;align-items:start}
+.about h2{font-family:var(--serif);font-size:clamp(2.3rem,4.8vw,3.8rem);font-weight:500;line-height:1.08;margin-top:16px}
+.about-lede{font-family:var(--serif);font-size:1.35rem;font-style:italic;line-height:1.45;color:#33415C;margin-top:26px}
+.about-copy{color:#46536B;margin-top:20px}
+.principles{border-top:1px solid #D9CFBB}
+.principle{display:grid;grid-template-columns:64px 1fr;gap:20px;padding:26px 0;border-bottom:1px solid #D9CFBB}
+.principle b{font-family:var(--serif);font-size:1.5rem;font-weight:600;color:#9A6200}
+.principle h3{font-family:var(--serif);font-size:1.25rem;font-weight:600;margin-bottom:6px}
+.principle p{color:#46536B;font-size:.94rem}
+
+/* Contact */
+.contact{background:var(--navy-800);position:relative;overflow:hidden}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:start}
+.contact h2{font-family:var(--serif);font-size:clamp(2.3rem,4.8vw,3.7rem);font-weight:500;line-height:1.08;margin-top:16px}
+.contact p{color:var(--muted);margin-top:20px;max-width:480px}
+.contact-details{margin-top:38px;border-top:1px solid var(--line)}
+.contact-details div{display:flex;justify-content:space-between;gap:20px;padding:17px 0;border-bottom:1px solid var(--line);font-size:.94rem}
+.contact-details span{color:var(--muted-2);letter-spacing:.1em;text-transform:uppercase;font-size:.72rem;font-weight:700;padding-top:3px}
+form{display:grid;gap:16px}
+label{font-size:.74rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+input,textarea,select{width:100%;margin-top:8px;background:#0B213F;border:1px solid var(--line);color:var(--white);padding:14px 16px;font-family:var(--sans);font-size:.96rem;border-radius:0}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px}
+textarea{min-height:132px;resize:vertical}
+.form-note{font-size:.82rem;color:var(--muted-2);font-style:italic}
+
+/* Footer */
+footer{background:#061224;padding:54px 0 44px;border-top:1px solid var(--line)}
+.footer-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:28px;padding-bottom:34px;border-bottom:1px solid var(--line)}
+.footer-note{color:var(--muted);font-size:.9rem;margin-top:28px;max-width:760px}
+.footer-small{color:var(--muted-2);font-size:.78rem;margin-top:10px}
+
+/* Responsive */
+@media (max-width:960px){
+  .service-grid{grid-template-columns:repeat(2,1fr)}
+  .about-grid,.contact-grid{grid-template-columns:1fr;gap:48px}
+  .hero-arch{opacity:.55;width:70vw}
+}
+@media (max-width:680px){
+  .nav-links{display:none}
+  .wrap{width:calc(100% - 36px)}
+  section{padding:78px 0}
+  .hero{padding:126px 0 72px}
+  .property-grid,.service-grid{grid-template-columns:1fr}
+  .service{min-height:0}
+  .service h3{margin-top:28px}
+  .property-visual{height:230px}
+  .hero-foot{gap:18px}
+  .btn{width:100%;text-align:center}
+  .hero-actions{flex-direction:column}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .reveal{transition:none;opacity:1;transform:none}
+  .strip-track{animation:none}
+}
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="wrap nav">
+    <a class="brand" href="#top">Hartwell &amp; Grey<span>Estates</span></a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="#services">Services</a>
+      <a href="#showcase">Showcase</a>
+      <a href="#about">Why Us</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="nav-cta" href="#contact">Enquire</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-art" id="heroArt"></div>
+    <div class="hero-arch"></div>
+    <div class="wrap">
+      <div class="hero-inner">
+        <span class="concept-badge">Concept</span>
+        <h1>Homes cared<br>for like <em>estates.</em></h1>
+        <p class="hero-sub">Quiet, careful property management for owners who want their homes looked after properly.</p>
+        <p class="hero-copy">Hartwell &amp; Grey is a fictional luxury management house created for this design showcase. The idea is simple: one dedicated team, clear communication, and homes that are kept to the standard they were built to.</p>
+        <div class="hero-actions">
+          <a class="btn btn-gold" href="#contact">Start a conversation</a>
+          <a class="btn btn-outline" href="#showcase">View the showcase</a>
+        </div>
+        <div class="hero-foot">
+          <div><strong>Full service</strong><span>Management, end to end</span></div>
+          <div><strong>One contact</strong><span>A named manager, always</span></div>
+          <div><strong>Considered care</strong><span>For home and resident</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="strip" aria-hidden="true">
+    <div class="strip-track">
+      <span>Leasing and placement</span><span>·</span><span>Maintenance, handled quietly</span><span>·</span><span>Owner reporting, in plain English</span><span>·</span><span>Homes kept beautifully</span><span>·</span>
+      <span>Leasing and placement</span><span>·</span><span>Maintenance, handled quietly</span><span>·</span><span>Owner reporting, in plain English</span><span>·</span><span>Homes kept beautifully</span><span>·</span>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">What we do</p>
+        <div class="rule"></div>
+        <h2>Management that feels personal, not procedural.</h2>
+        <p>Every service below is written for this concept as an example of scope. It is the kind of calm, complete care a discerning owner would expect.</p>
+      </div>
+      <div class="service-grid">
+        <article class="service reveal">
+          <div class="service-num">01</div>
+          <h3>Full Service Management</h3>
+          <p>Day to day oversight of the home, from rent collection and inspections to the small details that keep a property feeling lived in and loved.</p>
+          <a href="#contact">Discuss your home</a>
+        </article>
+        <article class="service reveal reveal-delay-1">
+          <div class="service-num">02</div>
+          <h3>Leasing and Placement</h3>
+          <p>Thoughtful presentation, careful screening, and a measured placement process that looks for residents who will respect the home.</p>
+          <a href="#contact">Discuss leasing</a>
+        </article>
+        <article class="service reveal reveal-delay-2">
+          <div class="service-num">03</div>
+          <h3>Maintenance Coordination</h3>
+          <p>Trusted trades, prompt scheduling, and updates before you have to ask. Repairs are arranged, supervised, and reported back clearly.</p>
+          <a href="#contact">Discuss maintenance</a>
+        </article>
+        <article class="service reveal reveal-delay-3">
+          <div class="service-num">04</div>
+          <h3>Owner Reporting and Care</h3>
+          <p>A clear monthly summary, honest advice when something needs attention, and a manager who knows your property by name, not by number.</p>
+          <a href="#contact">Discuss reporting</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHOWCASE -->
+  <section class="showcase" id="showcase">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Showcase</p>
+        <div class="rule"></div>
+        <h2>A small portfolio, presented like an editorial.</h2>
+        <p>These four properties are fictional and written for demonstration only. They show how a portfolio could be presented, with restraint and with room for each home to speak.</p>
+      </div>
+      <div class="property-grid">
+
+        <article class="property reveal">
+          <div class="property-visual v1" data-initials="LR"><span class="property-tag">Illustrative listing</span></div>
+          <div class="property-body">
+            <h3>The Linden Residence</h3>
+            <p class="property-loc">Garden District, Concept Address</p>
+            <p>A light filled family home with a mature garden, a reading room off the hall, and proportions that make everyday living feel unhurried.</p>
+            <div class="property-meta"><span><strong>4</strong> bedrooms</span><span><strong>3</strong> bathrooms</span><span><strong>Garden</strong> and terrace</span></div>
+            <p class="price-note">Price on request. Fictional property, shown for design purposes.</p>
+          </div>
+        </article>
+
+        <article class="property reveal reveal-delay-1">
+          <div class="property-visual v2" data-initials="MH"><span class="property-tag">Illustrative listing</span></div>
+          <div class="property-body">
+            <h3>Marlowe House</h3>
+            <p class="property-loc">Old Town Quarter, Concept Address</p>
+            <p>A restored townhouse with original fireplaces, tall sash windows, and a kitchen built for long evenings around one generous table.</p>
+            <div class="property-meta"><span><strong>5</strong> bedrooms</span><span><strong>4</strong> bathrooms</span><span><strong>Study</strong> and cellar</span></div>
+            <p class="price-note">Price on request. Fictional property, shown for design purposes.</p>
+          </div>
+        </article>
+
+        <article class="property reveal">
+          <div class="property-visual v3" data-initials="AP"><span class="property-tag">Illustrative listing</span></div>
+          <div class="property-body">
+            <h3>The Ashford Penthouse</h3>
+            <p class="property-loc">Riverside, Concept Address</p>
+            <p>A calm apartment above the city, with a wraparound terrace, a private lift lobby, and evening light that does most of the decorating.</p>
+            <div class="property-meta"><span><strong>3</strong> bedrooms</span><span><strong>3</strong> bathrooms</span><span><strong>Terrace</strong> and parking</span></div>
+            <p class="price-note">Price on request. Fictional property, shown for design purposes.</p>
+          </div>
+        </article>
+
+        <article class="property reveal reveal-delay-1">
+          <div class="property-visual v4" data-initials="WC"><span class="property-tag">Illustrative listing</span></div>
+          <div class="property-body">
+            <h3>Willow Court Estate</h3>
+            <p class="property-loc">Village Edge, Concept Address</p>
+            <p>A private estate house set behind old trees, with a guest annexe, a walled garden, and the kind of quiet you can hear.</p>
+            <div class="property-meta"><span><strong>6</strong> bedrooms</span><span><strong>5</strong> bathrooms</span><span><strong>Annexe</strong> and grounds</span></div>
+            <p class="price-note">Price on request. Fictional property, shown for design purposes.</p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="wrap about-grid">
+      <div class="reveal">
+        <p class="eyebrow">Why Hartwell &amp; Grey</p>
+        <div class="rule"></div>
+        <h2>Because a home is not a unit. It is someone's place in the world.</h2>
+        <p class="about-lede">Good management is mostly invisible. The bills are paid, the garden is kept, the resident feels settled, and the owner can stop worrying.</p>
+        <p class="about-copy">This concept imagines a management house built on that belief. No noise, no jargon, and no grand promises. Just careful people, clear systems, and a standard that is checked in person, on the doorstep, where it matters.</p>
+        <p class="about-copy">It is a design study in how trust can look and sound online: editorial, unhurried, and honest about what it is.</p>
+      </div>
+      <div class="principles reveal reveal-delay-1">
+        <div class="principle">
+          <b>01</b>
+          <div><h3>One named manager</h3><p>You always know who to call, and they already know your home, your preferences, and your residents.</p></div>
+        </div>
+        <div class="principle">
+          <b>02</b>
+          <div><h3>Clear, written updates</h3><p>Inspections, repairs, and accounts are summarised in plain language, so nothing important hides in fine print.</p></div>
+        </div>
+        <div class="principle">
+          <b>03</b>
+          <div><h3>Care for both sides</h3><p>Owners get diligence and residents get respect. When both feel looked after, tenancies last and homes stay in good heart.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="wrap contact-grid">
+      <div class="reveal">
+        <p class="eyebrow">Contact</p>
+        <div class="rule"></div>
+        <h2>Tell us about your home.</h2>
+        <p>This form is part of the concept and does not send messages. In a live version, it would open a private conversation about your property, your timeline, and the level of care you are looking for.</p>
+        <div class="contact-details">
+          <div><span>Studio</span><strong>Concept address, by appointment</strong></div>
+          <div><span>Hours</span><strong>Monday to Friday, 9am to 6pm</strong></div>
+          <div><span>Enquiries</span><strong>Use the form on this page</strong></div>
+        </div>
+      </div>
+      <form class="reveal reveal-delay-1" action="#" method="post" onsubmit="return false;">
+        <div>
+          <label for="name">Your name</label>
+          <input id="name" name="name" type="text" placeholder="Full name" autocomplete="name">
+        </div>
+        <div>
+          <label for="email">Email address</label>
+          <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div>
+          <label for="interest">I am interested in</label>
+          <select id="interest" name="interest">
+            <option>Full service management</option>
+            <option>Leasing and placement</option>
+            <option>Maintenance coordination</option>
+            <option>Something else</option>
+          </select>
+        </div>
+        <div>
+          <label for="message">About your property</label>
+          <textarea id="message" name="message" placeholder="Location, size, and what matters most to you"></textarea>
+        </div>
+        <button class="btn btn-gold" type="submit">Send enquiry</button>
+        <p class="form-note">Concept form only. Nothing is collected or sent from this page.</p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <a class="brand" href="#top">Hartwell &amp; Grey<span>Estates</span></a>
+      <nav class="nav-links" aria-label="Footer navigation">
+        <a href="#services">Services</a>
+        <a href="#showcase">Showcase</a>
+        <a href="#about">Why Us</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+    <p class="footer-note">Concept website - designed & built by AlphaFlux AI (Gul Sehar) as a design showcase.</p>
+    <p class="footer-small">Hartwell &amp; Grey Estates is a fictional brand created for this showcase. All properties, addresses, and services described are illustrative.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var header = document.getElementById('siteHeader');
+  var heroArt = document.getElementById('heroArt');
+  var ticking = false;
+
+  function onScroll(){
+    var y = window.scrollY || window.pageYOffset;
+    if (y > 24) { header.classList.add('scrolled'); } else { header.classList.remove('scrolled'); }
+    if (heroArt && y < window.innerHeight * 1.2) {
+      heroArt.style.transform = 'translateY(' + (y * 0.18) + 'px)';
+    }
+    ticking = false;
+  }
+  window.addEventListener('scroll', function(){
+    if (!ticking) { window.requestAnimationFrame(onScroll); ticking = true; }
+  }, {passive:true});
+  onScroll();
+
+  var items = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {threshold: 0.14, rootMargin: '0px 0px -40px 0px'});
+    items.forEach(function(item){ observer.observe(item); });
+  } else {
+    items.forEach(function(item){ item.classList.add('visible'); });
+  }
+})();
+</script>
+</body>
+</html>

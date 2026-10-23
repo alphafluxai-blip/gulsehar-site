@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case study · Gul Sehar</title>
+<meta name="description" content="A production AI system built by Gul Sehar.">
+<meta name="theme-color" content="#0B1220">
+<meta property="og:title" content="Case study · Gul Sehar">
+<meta property="og:description" content="A production AI system built by Gul Sehar.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="assets/portrait-sehar.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Case study · Gul Sehar">
+<meta name="twitter:description" content="A production AI system built by Gul Sehar.">
+<meta name="twitter:image" content="assets/portrait-sehar.png">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="logo" href="index.html">Gul Sehar</a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="index.html#work">All case studies</a>
+      <a href="index.html#demos">Demos</a>
+      <a href="index.html#process">Process</a>
+    </nav>
+    <a class="btn btn-small" href="index.html#about">Start a project</a>
+  </div>
+</header>
+
+<main id="case-root">
+  <section class="case-hero scene-dark" data-theme="dark">
+    <div class="wrap">
+      <p class="label" id="c-kicker">Case study</p>
+      <div class="code" id="c-code">CS</div>
+      <h1 class="lines now" id="c-title"></h1>
+      <p class="lede" id="c-sub"></p>
+      <div class="stamps" id="c-stamps"></div>
+    </div>
+  </section>
+
+  <section class="scene-light" data-theme="light">
+    <div class="wrap">
+      <div class="case-body">
+        <div class="reveal">
+          <h2>The system</h2>
+          <p id="c-problem"></p>
+          <p id="c-build"></p>
+          <ul class="feat" id="c-feat"></ul>
+        </div>
+        <div class="reveal">
+          <div class="panel"><h4>By the numbers</h4><div id="c-metrics"></div></div>
+          <div class="panel"><h4>Built with</h4><ul class="tools" id="c-tools"></ul></div>
+          <div class="panel"><h4>Engineering details clients don't see</h4><ul class="details" id="c-details"></ul></div>
+        </div>
+      </div>
+      <div class="case-next reveal">
+        <span class="label">Next case study</span>
+        <a id="c-next" href="#"></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="about scene-dark" data-theme="dark">
+    <div class="wrap about-grid">
+      <figure class="about-portrait reveal"><img src="assets/portrait-sehar.png" alt="Gul Sehar" loading="lazy"></figure>
+      <div class="about-copy reveal">
+        <p class="label">Want a system like this?</p>
+        <h2 class="serif-h" id="c-cta"></h2>
+        <p class="lede">Tell me about the problem and I'll sketch what the system would look like for your business.</p>
+        <ul class="contact-list">
+          <li><span class="label">Email</span><a href="mailto:info.gulsehar@gmail.com">info.gulsehar@gmail.com</a></li>
+          <li><span class="label">Instagram</span><a href="https://instagram.com/sehar.builds" target="_blank" rel="noopener">@sehar.builds</a></li>
+          <li><span class="label">Store</span><a href="https://alphafluxaii.gumroad.com" target="_blank" rel="noopener">alphafluxaii.gumroad.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <footer class="wrap foot"><span>© 2026 Gul Sehar · AlphaFlux</span><span class="label">AI automation · CRM · websites</span></footer>
+  </section>
+</main>
+
+<script src="assets/cases.js"></script>
+<script>
+(function(){
+  var ids = Object.keys(CASES);
+  var id = new URLSearchParams(location.search).get('c') || ids[0];
+  var c = CASES[id] || CASES[ids[0]];
+  var esc = function(s){ return s.replace(/[&<>]/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;'}[m]; }); };
+  document.title = c.name + ' · Gul Sehar';
+  document.getElementById('c-kicker').textContent = 'Case study ' + c.code.slice(2) + ' · ' + c.client;
+  document.getElementById('c-code').textContent = c.code;
+  document.getElementById('c-title').innerHTML = '<span class="line"><span>' + esc(c.title) + '</span></span>';
+  document.getElementById('c-sub').textContent = c.summary;
+  document.getElementById('c-stamps').innerHTML = c.stamps.map(function(s,i){ return '<span class="stamp' + (i===0?' b':'') + '">' + esc(s) + '</span>'; }).join('');
+  document.getElementById('c-problem').innerHTML = '<b>The problem:</b> ' + esc(c.problem);
+  document.getElementById('c-build').innerHTML = '<b>The build:</b> ' + esc(c.build);
+  document.getElementById('c-feat').innerHTML = c.features.map(function(f,i){ return '<li><span class="k">' + c.code.slice(2) + '-' + String(i+1).padStart(2,'0') + '</span><span><b>' + esc(f[0]) + '</b>: ' + esc(f[1]) + '</span></li>'; }).join('');
+  document.getElementById('c-metrics').innerHTML = c.metrics.map(function(m){ return '<div class="metric"><span>' + esc(m[0]) + '</span><b>' + esc(m[1]) + '</b></div>'; }).join('');
+  document.getElementById('c-tools').innerHTML = c.tools.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('');
+  document.getElementById('c-details').innerHTML = c.details.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('');
+  document.getElementById('c-cta').textContent = c.cta;
+  var n = ids[(ids.indexOf(id) + 1) % ids.length];
+  var next = document.getElementById('c-next'); next.href = 'case.html?c=' + n; next.textContent = CASES[n].code + ' · ' + CASES[n].name + ' →';
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

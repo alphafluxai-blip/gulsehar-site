@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RightsVault — UGC Rights OS | AlphaFlux AI</title>
+<meta name="description" content="RightsVault tracks usage rights for every UGC asset: license windows, platforms, whitelisting, expiry alerts, renewal costs and a pre-flight check before you run an ad.">
+<style>
+  :root{
+    --bg:#0a0a0b; --panel:#131315; --panel2:#1a1a1e; --line:#26262b;
+    --gold:#d4af37; --gold2:#f0d060; --text:#f4f1e8; --muted:#9b978c;
+    --green:#3fb96f; --amber:#e8a13a; --red:#e5484d; --radius:16px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--bg); color:var(--text); font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; min-height:100vh}
+  header{display:flex; align-items:center; justify-content:space-between; padding:18px 28px; border-bottom:1px solid var(--line); flex-wrap:wrap; gap:10px}
+  .logo{display:flex; align-items:center; gap:12px; font-weight:800; font-size:20px}
+  .logo-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#8a6d1f);display:grid;place-items:center;color:#0a0a0b;font-size:18px}
+  .badge{font-size:11px; color:#0a0a0b; background:var(--gold); padding:3px 9px; border-radius:999px; font-weight:700}
+  .by{color:var(--muted); font-size:13px}
+  main{max-width:1220px; margin:0 auto; padding:26px 20px 60px}
+  .hero h1{font-size:32px; line-height:1.15; font-weight:800}
+  .hero h1 span{color:var(--gold)}
+  .hero p{color:var(--muted); margin-top:8px; max-width:720px; font-size:15px; line-height:1.55}
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; margin-top:24px}
+  .stat{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:16px}
+  .stat .num{font-size:30px; font-weight:800}
+  .stat .lbl{color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.8px; margin-top:4px}
+  .stat.warn{border-color:var(--amber)} .stat.bad{border-color:var(--red)}
+  .stat.warn .num{color:var(--amber)} .stat.bad .num{color:var(--red)}
+  .grid{display:grid; grid-template-columns:1fr 340px; gap:20px; margin-top:20px; align-items:start}
+  @media(max-width:950px){.grid{grid-template-columns:1fr}}
+  .panel{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:18px}
+  .panel h3{font-size:13px; text-transform:uppercase; letter-spacing:1px; color:var(--gold); margin-bottom:14px}
+  button{border:1px solid var(--line); background:var(--panel2); color:var(--text); padding:9px 14px; border-radius:10px; font-size:13px; font-weight:600; cursor:pointer}
+  button:hover{border-color:var(--gold)}
+  button.primary{background:linear-gradient(135deg,var(--gold),#a8842a); color:#0a0a0b; border:none}
+  button.small{padding:6px 10px; font-size:12px}
+  .toolbar{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; align-items:center}
+  .toolbar input[type=search], .toolbar select{background:var(--panel2); border:1px solid var(--line); color:var(--text); border-radius:9px; padding:9px; font-size:13px}
+  .chip{padding:6px 12px; border-radius:999px; font-size:12px}
+  .chip.active{background:var(--gold); color:#0a0a0b; border-color:var(--gold)}
+  .asset{border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:12px; background:var(--panel2)}
+  .asset-top{display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap}
+  .asset h4{font-size:16px}
+  .meta{color:var(--muted); font-size:13px; margin-top:3px; line-height:1.5}
+  .pill{font-size:11px; font-weight:800; padding:4px 10px; border-radius:999px; text-transform:uppercase; letter-spacing:.5px; white-space:nowrap}
+  .pill.active{background:rgba(63,185,111,.15); color:var(--green); border:1px solid var(--green)}
+  .pill.warning{background:rgba(232,161,58,.13); color:var(--amber); border:1px solid var(--amber)}
+  .pill.critical,.pill.expired{background:rgba(229,72,77,.13); color:var(--red); border:1px solid var(--red)}
+  .pill.perpetual{background:rgba(212,175,55,.15); color:var(--gold2); border:1px solid var(--gold)}
+  .bar{height:8px; background:#26262b; border-radius:99px; margin-top:12px; overflow:hidden}
+  .bar > div{height:100%; border-radius:99px}
+  .tags{display:flex; gap:6px; flex-wrap:wrap; margin-top:10px}
+  .tag{font-size:11px; background:#26262b; padding:3px 8px; border-radius:6px; color:var(--muted)}
+  .asset-actions{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap}
+  .alert{display:flex; gap:10px; padding:11px 0; border-bottom:1px solid var(--line); font-size:13px; line-height:1.5}
+  .alert:last-child{border-bottom:none}
+  .alert .ico{font-size:16px}
+  .field{margin-bottom:12px}
+  .field label{display:block; font-size:12px; color:var(--muted); margin-bottom:5px}
+  .field input,.field select,.field textarea{width:100%; background:var(--panel2); border:1px solid var(--line); color:var(--text); border-radius:9px; padding:9px; font-size:13px}
+  .checks{display:flex; flex-wrap:wrap; gap:6px}
+  .checks label{font-size:12px; background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:6px 9px; cursor:pointer; color:var(--text)}
+  .checks input{accent-color:var(--gold); margin-right:4px}
+  .verdict{border-radius:12px; padding:14px; margin-top:12px; font-size:14px; line-height:1.55; display:none}
+  .verdict.ok{display:block; background:rgba(63,185,111,.1); border:1px solid var(--green)}
+  .verdict.no{display:block; background:rgba(229,72,77,.1); border:1px solid var(--red)}
+  .verdict b{font-size:16px}
+  .hint{font-size:12px; color:var(--muted); line-height:1.55; margin-top:10px}
+  dialog{background:var(--panel); color:var(--text); border:1px solid var(--gold); border-radius:var(--radius); padding:22px; width:min(560px,92vw); max-height:88vh; overflow:auto}
+  dialog::backdrop{background:rgba(0,0,0,.7)}
+  .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+  @media(max-width:560px){.form-grid{grid-template-columns:1fr}}
+  footer{border-top:1px solid var(--line); padding:20px 28px; color:var(--muted); font-size:13px; text-align:center}
+  .empty{color:var(--muted); text-align:center; padding:30px; font-size:14px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><div class="logo-mark">🛡️</div> RightsVault <span class="badge">UGC RIGHTS OS</span></div>
+  <div class="by">Built by <b style="color:var(--gold2)">AlphaFlux AI</b> — never run an expired UGC ad again</div>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>Every UGC video has an expiry date. <span>Most brands find out too late.</span></h1>
+    <p>Usage rights add 25–150% on top of a creator's base fee, whitelisting is billed monthly, and running a video past its license window is a legal risk. RightsVault keeps the rights record for every asset — what you bought, where you can run it, and the day it expires — and checks an asset <i>before</i> you spend ad money on it.</p>
+  </section>
+
+  <section class="stats" id="stats"></section>
+
+  <div class="grid">
+    <section class="panel">
+      <h3>Asset library</h3>
+      <div class="toolbar">
+        <input type="search" id="q" placeholder="Search title, creator, brand…">
+        <button class="chip filter active" data-f="all">All</button>
+        <button class="chip filter" data-f="active">Active</button>
+        <button class="chip filter" data-f="warning">Expiring ≤30d</button>
+        <button class="chip filter" data-f="expired">Expired</button>
+        <button class="chip filter" data-f="perpetual">Perpetual</button>
+      </div>
+      <div class="toolbar">
+        <button class="primary" id="btnAdd">＋ Add asset</button>
+        <button id="btnCsv">⬇ Export CSV</button>
+        <button id="btnReset">Reset demo data</button>
+        <button id="btnClear">Clear all</button>
+      </div>
+      <div id="list"></div>
+    </section>
+
+    <div>
+      <section class="panel" style="margin-bottom:20px">
+        <h3>⚠ Expiry alerts</h3>
+        <div id="alerts"></div>
+      </section>
+
+      <section class="panel" style="margin-bottom:20px">
+        <h3>✅ Pre-flight check — can I run this?</h3>
+        <div class="field"><label>Asset</label><select id="pfAsset"></select></div>
+        <div class="field"><label>Platform</label>
+          <select id="pfPlatform">
+            <option>TikTok</option><option>Meta (FB/IG)</option><option>YouTube</option>
+            <option>Brand Website</option><option>Email</option><option>Amazon</option>
+          </select></div>
+        <div class="field"><label>How will it be used?</label>
+          <select id="pfUse">
+            <option value="organic">Organic post</option>
+            <option value="paid">Paid ad</option>
+            <option value="whitelisting">Whitelisting / Spark Ad (from creator's handle)</option>
+            <option value="raw">Re-edit the raw footage</option>
+          </select></div>
+        <div class="field"><label>Run date</label><input type="date" id="pfDate"></div>
+        <button class="primary" id="btnCheck" style="width:100%">Check this asset</button>
+        <div class="verdict" id="verdict"></div>
+        <p class="hint">The check compares the run date, platform and use type against the license you actually bought — the three mistakes that quietly turn a $300 video into a legal problem.</p>
+      </section>
+
+      <section class="panel">
+        <h3>💰 Renewal cost estimator</h3>
+        <div class="field"><label>Asset (uses its base creation fee)</label><select id="estAsset"></select></div>
+        <div class="field"><label>Extend by</label>
+          <select id="estMonths">
+            <option value="6">6 months — market range +25% to +50% of base fee</option>
+            <option value="12">12 months — market range +50% to +100% of base fee</option>
+            <option value="999">Perpetual — market range +100% to +150% of base fee</option>
+          </select></div>
+        <button id="btnEst" style="width:100%">Estimate renewal</button>
+        <div id="estOut" style="margin-top:12px; font-size:14px; line-height:1.6"></div>
+        <p class="hint">Ranges are 2026 market benchmarks for UGC usage rights, not quotes — the creator's actual renewal price is negotiated. Whitelisting typically bills separately at 30–100% of the base fee <i>per month</i>.</p>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer>RightsVault — a portfolio product concept by AlphaFlux AI · Demo build: data lives in your browser (localStorage) · v2 roadmap: team accounts, email alerts, contract upload</footer>
+
+<dialog id="dlg">
+  <h3 style="color:var(--gold); letter-spacing:1px; font-size:14px; text-transform:uppercase; margin-bottom:16px" id="dlgTitle">Add UGC asset</h3>
+  <form method="dialog" id="assetForm">
+    <div class="form-grid">
+      <div class="field"><label>Video title *</label><input id="fTitle" required placeholder="e.g. Serum testimonial — morning routine"></div>
+      <div class="field"><label>Creator *</label><input id="fCreator" required placeholder="Creator name / handle"></div>
+      <div class="field"><label>Brand / campaign</label><input id="fBrand" placeholder="e.g. LumiSkin — Q4 launch"></div>
+      <div class="field"><label>Base creation fee (USD)</label><input id="fFee" type="number" min="0" step="1" value="300"></div>
+      <div class="field"><label>License start date *</label><input id="fStart" type="date" required></div>
+      <div class="field"><label>License length</label>
+        <select id="fMonths">
+          <option value="1">1 month</option><option value="3">3 months</option>
+          <option value="6">6 months</option><option value="12" selected>12 months</option>
+          <option value="24">24 months</option><option value="999">Perpetual</option>
+        </select></div>
+    </div>
+    <div class="field"><label>Licensed platforms</label>
+      <div class="checks" id="fPlatforms">
+        <label><input type="checkbox" value="TikTok" checked>TikTok</label>
+        <label><input type="checkbox" value="Meta (FB/IG)" checked>Meta (FB/IG)</label>
+        <label><input type="checkbox" value="YouTube">YouTube</label>
+        <label><input type="checkbox" value="Brand Website">Website</label>
+        <label><input type="checkbox" value="Email">Email</label>
+        <label><input type="checkbox" value="Amazon">Amazon</label>
+      </div></div>
+    <div class="field"><label>Usage rights included</label>
+      <div class="checks" id="fUses">
+        <label><input type="checkbox" value="organic" checked>Organic</label>
+        <label><input type="checkbox" value="paid" checked>Paid ads</label>
+        <label><input type="checkbox" value="whitelisting">Whitelisting</label>
+        <label><input type="checkbox" value="raw">Raw footage</label>
+        <label><input type="checkbox" value="exclusivity">Category exclusivity</label>
+      </div></div>
+    <div class="field"><label>Notes (contract link, terms…)</label><textarea id="fNotes" rows="2" placeholder="Optional"></textarea></div>
+    <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:8px">
+      <button type="button" id="btnCancel">Cancel</button>
+      <button type="submit" class="primary" id="btnSave">Save asset</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const KEY = "rightsvault_v1";
+  const DAY = 86400000;
+  const today = () => { const d = new Date(); d.setHours(0,0,0,0); return d; };
+  const iso = d => d.toISOString().slice(0,10);
+  const addDays = (d,n) => new Date(d.getTime() + n*DAY);
+  const addMonths = (dateStr, m) => { const d = new Date(dateStr+"T00:00:00"); d.setMonth(d.getMonth()+m); return d; };
+  const money = n => "$" + Math.round(n).toLocaleString("en-US");
+
+  // ---------------- Seed (dates relative to today so statuses always demo correctly) ----------------
+  function seed(){
+    const t = today();
+    const mk = (o)=>Object.assign({ id: Math.random().toString(36).slice(2,9), renewals: [] }, o);
+    return [
+      mk({ title:"Serum testimonial — morning routine", creator:"Ayesha Khan (@ayesha.glow)", brand:"LumiSkin — Q4 launch",
+           fee:300, start: iso(addDays(t,-340)), months:12, platforms:["TikTok","Meta (FB/IG)"], uses:["organic","paid"], notes:"Contract in Drive. No competitor skincare ads during term." }),
+      mk({ title:"Hair oil unboxing + first impressions", creator:"Maria Lopez (@maria.curls)", brand:"VelvetRoot",
+           fee:250, start: iso(addDays(t,-174)), months:6, platforms:["TikTok"], uses:["organic","paid"], notes:"Whitelisting NOT included — ask before Spark Ads." }),
+      mk({ title:"Sneaker try-on haul (3 outfits)", creator:"Jay Park (@jaykicks)", brand:"StrideLab",
+           fee:400, start: iso(addDays(t,-102)), months:3, platforms:["Meta (FB/IG)","YouTube"], uses:["organic","paid","whitelisting"], notes:"Expired — still live in one ad set, pause it." }),
+      mk({ title:"Lip tint GRWM — full buyout", creator:"Sana Iqbal (@sana.beauty)", brand:"GlowCart",
+           fee:900, start: iso(addDays(t,-500)), months:999, platforms:["TikTok","Meta (FB/IG)","YouTube","Brand Website"], uses:["organic","paid","whitelisting","raw"], notes:"Perpetual buyout incl. raw footage." }),
+      mk({ title:"Protein bar taste test — gym bag edition", creator:"Dan Miller (@danlifts)", brand:"FuelForm",
+           fee:200, start: iso(addDays(t,-30)), months:6, platforms:["TikTok","Meta (FB/IG)","Amazon"], uses:["organic","paid"], notes:"" }),
+      mk({ title:"Night routine with retinol — raw + edited", creator:"Elena Rossi (@elena.skin)", brand:"LumiSkin — Q4 launch",
+           fee:550, start: iso(addDays(t,-80)), months:12, platforms:["TikTok","Meta (FB/IG)","Brand Website","Email"], uses:["organic","paid","raw","exclusivity"], notes:"Category exclusivity: no other retinol brands for 12 months." })
+    ];
+  }
+
+  let assets = load();
+  function load(){
+    try{ const raw = localStorage.getItem(KEY); if(raw) return JSON.parse(raw); }catch(_){}
+    const s = seed(); localStorage.setItem(KEY, JSON.stringify(s)); return s;
+  }
+  function save(){ localStorage.setItem(KEY, JSON.stringify(assets)); }
+
+  // ---------------- Rights engine ----------------
+  function expiryOf(a){ return a.months >= 999 ? null : addMonths(a.start, a.months); }
+  function statusOf(a){
+    const exp = expiryOf(a);
+    if(!exp) return { key:"perpetual", label:"Perpetual", days:null };
+    const days = Math.round((exp - today()) / DAY);
+    if(days < 0)  return { key:"expired",  label:"Expired " + Math.abs(days) + "d ago", days };
+    if(days <= 7) return { key:"critical", label:"Expires in " + days + "d", days };
+    if(days <= 30) return { key:"warning", label:"Expires in " + days + "d", days };
+    return { key:"active", label:"Active · " + days + "d left", days };
+  }
+  function termProgress(a){
+    const exp = expiryOf(a); if(!exp) return 100;
+    const total = exp - new Date(a.start+"T00:00:00");
+    const used = today() - new Date(a.start+"T00:00:00");
+    return Math.max(0, Math.min(100, Math.round(used/total*100)));
+  }
+  function barColor(key){ return {active:"var(--green)", warning:"var(--amber)", critical:"var(--red)", expired:"var(--red)", perpetual:"var(--gold)"}[key]; }
+  function useLabel(u){ return {organic:"Organic", paid:"Paid ads", whitelisting:"Whitelisting", raw:"Raw footage", exclusivity:"Exclusivity"}[u] || u; }
+
+  // ---------------- Render ----------------
+  let filter = "all";
+  function render(){
+    // Stats
+    const sts = assets.map(statusOf);
+    const expiring = assets.filter((a,i)=> sts[i].days !== null && sts[i].days >= 0 && sts[i].days <= 30);
+    const expired  = assets.filter((a,i)=> sts[i].key === "expired");
+    const atRisk   = expiring.concat(expired).reduce((s,a)=> s + (a.fee||0), 0);
+    $("stats").innerHTML =
+      stat(assets.length, "Assets tracked") +
+      stat(assets.filter((a,i)=>["active","perpetual","warning","critical"].includes(sts[i].key)).length, "Licensed to run") +
+      stat(expiring.length, "Expiring in 30 days", "warn") +
+      stat(expired.length, "Expired — stop ads", "bad") +
+      stat(money(atRisk), "Creation fees at risk", expired.length ? "bad" : "");
+
+    // Alerts (worst first)
+    const alerts = assets.map((a,i)=>({a, s:sts[i]}))
+      .filter(x=> x.s.key === "expired" || x.s.key === "critical" || x.s.key === "warning")
+      .sort((x,y)=> x.s.days - y.s.days);
+    $("alerts").innerHTML = alerts.length ? alerts.map(x=>
+      `<div class="alert"><span class="ico">${x.s.key==="expired" ? "⛔" : "⏳"}</span>
+       <span><b>${esc(x.a.title)}</b> — ${x.s.key==="expired" ? "license expired " + Math.abs(x.s.days) + " days ago. Pause every ad using it." : "expires in " + x.s.days + " days (" + iso(expiryOf(x.a)) + "). Renew or plan the replacement now."}</span></div>`
+    ).join("") : `<div class="alert"><span class="ico">✅</span><span>No licenses expiring in the next 30 days.</span></div>`;
+
+    // List
+    const q = $("q").value.trim().toLowerCase();
+    const shown = assets.map((a,i)=>({a, s:sts[i]})).filter(x=>{
+      if(filter !== "all" && x.s.key !== filter && !(filter==="warning" && x.s.key==="critical")) return false;
+      if(q && !(x.a.title + " " + x.a.creator + " " + x.a.brand).toLowerCase().includes(q)) return false;
+      return true;
+    }).sort((x,y)=> (x.s.days===null?9999:x.s.days) - (y.s.days===null?9999:y.s.days));
+
+    $("list").innerHTML = shown.length ? shown.map(x=>{
+      const exp = expiryOf(x.a);
+      return `<div class="asset">
+        <div class="asset-top"><h4>${esc(x.a.title)}</h4><span class="pill ${x.s.key}">${x.s.label}</span></div>
+        <div class="meta">🎬 ${esc(x.a.creator)} · 🏷️ ${esc(x.a.brand || "—")}<br>
+        License: ${x.a.start} → ${exp ? iso(exp) : "perpetual"} · Base fee ${money(x.a.fee||0)}${x.a.renewals.length ? " · renewed " + x.a.renewals.length + "×" : ""}</div>
+        <div class="bar"><div style="width:${termProgress(x.a)}%; background:${barColor(x.s.key)}"></div></div>
+        <div class="tags">${x.a.platforms.map(p=>`<span class="tag">${esc(p)}</span>`).join("")}${x.a.uses.map(u=>`<span class="tag">✓ ${useLabel(u)}</span>`).join("")}</div>
+        ${x.a.notes ? `<div class="meta" style="margin-top:8px">📝 ${esc(x.a.notes)}</div>` : ""}
+        <div class="asset-actions">
+          <button class="small" data-act="check" data-id="${x.a.id}">✅ Pre-flight check</button>
+          <button class="small" data-act="renew" data-id="${x.a.id}">🔁 Renew +6 months</button>
+          <button class="small" data-act="del" data-id="${x.a.id}">Delete</button>
+        </div></div>`;
+    }).join("") : `<div class="empty">No assets match. Add one with “＋ Add asset”.</div>`;
+
+    // Selects
+    const opts = assets.map(a=>`<option value="${a.id}">${esc(a.title)}</option>`).join("");
+    $("pfAsset").innerHTML = opts; $("estAsset").innerHTML = opts;
+    if(!$("pfDate").value) $("pfDate").value = iso(today());
+  }
+  function stat(num, lbl, cls){ return `<div class="stat ${cls||""}"><div class="num">${num}</div><div class="lbl">${lbl}</div></div>`; }
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+  function byId(id){ return assets.find(a=> a.id === id); }
+
+  // ---------------- Pre-flight check ----------------
+  function preflight(a, platform, use, dateStr){
+    const problems = [], oks = [];
+    const exp = expiryOf(a);
+    const runDate = new Date(dateStr + "T00:00:00");
+    if(exp && runDate > exp) problems.push(`License expired on ${iso(exp)} — running it on ${dateStr} is outside the licensed window.`);
+    else oks.push(exp ? `Run date is inside the license window (expires ${iso(exp)}).` : "Perpetual license — no expiry.");
+    if(!a.platforms.includes(platform)) problems.push(`${platform} is not in the licensed platforms (${a.platforms.join(", ") || "none"}).`);
+    else oks.push(`${platform} is licensed.`);
+    if(use === "paid" && !a.uses.includes("paid")) problems.push("Paid ad usage was not bought — this license covers " + (a.uses.map(useLabel).join(", ") || "nothing") + ".");
+    if(use === "whitelisting" && !a.uses.includes("whitelisting")) problems.push("Whitelisting / Spark Ads not included — that is billed separately (typically 30–100% of base fee per month).");
+    if(use === "raw" && !a.uses.includes("raw")) problems.push("Raw footage rights not included — you may only run the delivered edit.");
+    if(use === "organic" && !a.uses.includes("organic") && !a.uses.includes("paid")) problems.push("Neither organic nor paid usage is recorded for this asset.");
+    if(!problems.length) oks.push("Use type is covered by the license.");
+    return { ok: problems.length === 0, problems, oks };
+  }
+  $("btnCheck").addEventListener("click", ()=>{
+    const a = byId($("pfAsset").value); if(!a) return;
+    const r = preflight(a, $("pfPlatform").value, $("pfUse").value, $("pfDate").value || iso(today()));
+    const v = $("verdict");
+    v.className = "verdict " + (r.ok ? "ok" : "no");
+    v.innerHTML = `<b>${r.ok ? "✅ CLEARED to run" : "⛔ DO NOT RUN — yet"}</b><br>` +
+      r.oks.map(t=>"• " + esc(t)).join("<br>") +
+      (r.problems.length ? "<br>" + r.problems.map(t=>"• " + esc(t)).join("<br>") +
+        "<br><b>Fix:</b> renew the license or extend the rights with the creator before spending on this asset." : "");
+  });
+
+  // ---------------- Estimator ----------------
+  $("btnEst").addEventListener("click", ()=>{
+    const a = byId($("estAsset").value); if(!a) return;
+    const m = parseInt($("estMonths").value, 10);
+    const range = m === 6 ? [0.25, 0.50] : m === 12 ? [0.50, 1.00] : [1.00, 1.50];
+    $("estOut").innerHTML = `Renewing <b>${esc(a.title)}</b> (${m >= 999 ? "perpetual" : m + " months"}) on a ${money(a.fee||0)} base fee:<br>` +
+      `<b style="color:var(--gold2); font-size:18px">${money((a.fee||0)*range[0])} – ${money((a.fee||0)*range[1])}</b><br>` +
+      `<span style="color:var(--muted)">Budget this before the license lapses — renewing after expiry usually costs more and leaves a gap where ads must pause.</span>`;
+  });
+
+  // ---------------- Actions ----------------
+  $("list").addEventListener("click", e=>{
+    const btn = e.target.closest("button[data-act]"); if(!btn) return;
+    const a = byId(btn.dataset.id); if(!a) return;
+    if(btn.dataset.act === "del"){
+      assets = assets.filter(x=> x.id !== a.id); save(); render();
+    } else if(btn.dataset.act === "check"){
+      $("pfAsset").value = a.id; $("btnCheck").click();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if(btn.dataset.act === "renew"){
+      const exp = expiryOf(a);
+      const from = exp && exp > today() ? exp : today();
+      const newExp = new Date(from); newExp.setMonth(newExp.getMonth() + 6);
+      // extend by shifting start so start+months = newExp (keep months, move start)
+      const totalMonths = a.months >= 999 ? 999 : Math.round((newExp - new Date(a.start+"T00:00:00")) / (30.44*DAY));
+      a.renewals.push({ date: iso(today()), months: 6, newExpiry: iso(newExp) });
+      if(a.months < 999){ a.months = totalMonths; }
+      save(); render();
+    }
+  });
+  document.querySelectorAll(".filter").forEach(b=> b.addEventListener("click", ()=>{
+    document.querySelectorAll(".filter").forEach(x=> x.classList.remove("active"));
+    b.classList.add("active"); filter = b.dataset.f; render();
+  }));
+  $("q").addEventListener("input", render);
+  $("btnCsv").addEventListener("click", ()=>{
+    const rows = [["Title","Creator","Brand","Base fee USD","Start","Expiry","Status","Platforms","Uses"]];
+    assets.forEach(a=>{ const s = statusOf(a); const exp = expiryOf(a);
+      rows.push([a.title, a.creator, a.brand, a.fee||0, a.start, exp ? iso(exp) : "perpetual", s.label, a.platforms.join("; "), a.uses.map(useLabel).join("; ")]); });
+    const csv = rows.map(r=> r.map(c=> '"' + String(c).replace(/"/g,'""') + '"').join(",")).join("\n");
+    const aEl = document.createElement("a");
+    aEl.href = URL.createObjectURL(new Blob([csv], {type:"text/csv"})); aEl.download = "rightsvault-assets.csv"; aEl.click();
+    setTimeout(()=> URL.revokeObjectURL(aEl.href), 3000);
+  });
+  $("btnReset").addEventListener("click", ()=>{ assets = seed(); save(); render(); });
+  $("btnClear").addEventListener("click", ()=>{ assets = []; save(); render(); });
+
+  // ---------------- Add form ----------------
+  const dlg = $("dlg");
+  $("btnAdd").addEventListener("click", ()=>{ $("fStart").value = iso(today()); dlg.showModal(); });
+  $("btnCancel").addEventListener("click", ()=> dlg.close());
+  $("assetForm").addEventListener("submit", e=>{
+    e.preventDefault();
+    const platforms = Array.from(document.querySelectorAll("#fPlatforms input:checked")).map(i=> i.value);
+    const uses = Array.from(document.querySelectorAll("#fUses input:checked")).map(i=> i.value);
+    assets.push({
+      id: Math.random().toString(36).slice(2,9),
+      title: $("fTitle").value.trim(), creator: $("fCreator").value.trim(),
+      brand: $("fBrand").value.trim(), fee: parseFloat($("fFee").value) || 0,
+      start: $("fStart").value, months: parseInt($("fMonths").value, 10),
+      platforms, uses, notes: $("fNotes").value.trim(), renewals: []
+    });
+    save(); dlg.close(); e.target.reset(); render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

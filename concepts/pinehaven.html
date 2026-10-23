@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pinehaven Retreat, Still Cabins in the Pines</title>
+<meta name="description" content="Pinehaven Retreat is a concept website for a small cabin retreat, designed and built as a design showcase.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#081A33;
+    --night-2:#0F172A;
+    --night-3:#122540;
+    --ink:#0B1526;
+    --paper:#F7F1E5;
+    --paper-soft:#EDE4D3;
+    --muted:#C9BFA9;
+    --muted-2:#9AA7BC;
+    --gold:#F59E0B;
+    --gold-2:#FFC727;
+    --line:rgba(247,241,229,.16);
+    --card:#0E2138;
+    --serif:"Fraunces", Georgia, serif;
+    --sans:"Manrope", Arial, sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--night-2);color:var(--paper);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  img{display:none}
+  ::selection{background:var(--gold);color:var(--ink)}
+
+  .wrap{width:min(1180px,92%);margin:0 auto}
+  .eyebrow{letter-spacing:.28em;text-transform:uppercase;font-size:.72rem;font-weight:700;color:var(--gold-2)}
+  .serif{font-family:var(--serif)}
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform .9s ease}
+  .reveal.visible{opacity:1;transform:none}
+  .reveal.d1{transition-delay:.08s}.reveal.d2{transition-delay:.16s}.reveal.d3{transition-delay:.24s}
+
+  /* Header */
+  header{position:fixed;inset:0 0 auto 0;z-index:50;transition:background .4s ease,border-color .4s ease;border-bottom:1px solid transparent}
+  header.scrolled{background:rgba(8,26,51,.94);border-color:var(--line);backdrop-filter:blur(10px)}
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.05rem 0}
+  .brand{font-family:var(--serif);font-size:1.35rem;font-weight:600;letter-spacing:.01em}
+  .brand span{color:var(--gold-2)}
+  .badge{display:inline-block;background:var(--gold);color:var(--ink);font-family:var(--sans);font-size:.62rem;font-weight:800;letter-spacing:.22em;padding:.32rem .6rem .28rem;border-radius:999px;vertical-align:middle;margin-left:.65rem;transform:translateY(-2px)}
+  .nav-links{display:flex;gap:2rem;font-size:.86rem;font-weight:600;color:var(--paper-soft)}
+  .nav-links a{opacity:.85;transition:opacity .25s,color .25s}
+  .nav-links a:hover{opacity:1;color:var(--gold-2)}
+  .nav-cta{border:1px solid var(--gold);color:var(--gold-2);padding:.55rem 1.05rem;border-radius:999px;font-size:.84rem;font-weight:700;transition:background .3s,color .3s}
+  .nav-cta:hover{background:var(--gold);color:var(--ink)}
+  @media(max-width:760px){.nav-links{display:none}}
+
+  /* Hero */
+  .hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;padding:9rem 0 5.5rem;overflow:hidden;background:linear-gradient(180deg,#081A33 0%,#0A2038 42%,#0F2A44 68%,#132E46 100%)}
+  .hero-sky{position:absolute;inset:0;background:radial-gradient(ellipse 620px 320px at 78% 18%,rgba(255,199,39,.20),transparent 65%),radial-gradient(ellipse 900px 500px at 12% 8%,rgba(247,241,229,.06),transparent 60%)}
+  .moon{position:absolute;top:13%;right:14%;width:74px;height:74px;border-radius:50%;background:radial-gradient(circle at 38% 34%,#FFF6D8,#F3D98B 68%,#E4C26A);opacity:.92}
+  .ridge{position:absolute;left:0;right:0;bottom:0;height:46%;will-change:transform}
+  .ridge.back{background:linear-gradient(160deg,transparent 49.6%,#0C2742 50%);clip-path:polygon(0 62%,14% 38%,30% 55%,46% 26%,62% 50%,78% 32%,100% 54%,100% 100%,0 100%);background-color:transparent}
+  .ridge.back::before{content:"";position:absolute;inset:0;background:#0C2742;clip-path:polygon(0 62%,14% 38%,30% 55%,46% 26%,62% 50%,78% 32%,100% 54%,100% 100%,0 100%)}
+  .ridge.front{height:34%}
+  .ridge.front::before{content:"";position:absolute;inset:0;background:#081426;clip-path:polygon(0 48%,18% 30%,36% 52%,54% 24%,72% 46%,88% 30%,100% 44%,100% 100%,0 100%)}
+  .pines{position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(180deg,transparent,#060F1E);clip-path:polygon(0 100%,0 55%,3% 55%,5% 30%,7% 55%,11% 55%,13% 18%,15% 55%,20% 55%,22% 38%,24% 55%,29% 55%,31% 24%,33% 55%,39% 55%,41% 34%,43% 55%,48% 55%,50% 16%,52% 55%,58% 55%,60% 36%,62% 55%,68% 55%,70% 26%,72% 55%,78% 55%,80% 40%,82% 55%,88% 55%,90% 22%,92% 55%,97% 55%,99% 38%,100% 55%,100% 100%)}
+  .hero-inner{position:relative;z-index:3;max-width:820px}
+  .hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(3.2rem,9vw,7.2rem);line-height:.98;letter-spacing:-.015em;margin:1.2rem 0 1.4rem}
+  .hero h1 em{font-style:italic;font-weight:300;color:var(--gold-2)}
+  .hero p.lede{font-size:clamp(1.05rem,2vw,1.28rem);color:var(--paper-soft);max-width:560px}
+  .hero-actions{display:flex;flex-wrap:wrap;gap:1rem;margin-top:2.4rem;align-items:center}
+  .btn{display:inline-block;background:var(--gold);color:var(--ink);font-weight:800;font-size:.95rem;padding:1rem 1.7rem;border-radius:999px;border:1px solid var(--gold);transition:background .3s,transform .3s}
+  .btn:hover{background:var(--gold-2);transform:translateY(-2px)}
+  .btn.ghost{background:transparent;color:var(--paper);border-color:var(--line)}
+  .btn.ghost:hover{border-color:var(--gold-2);color:var(--gold-2);background:transparent}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:2.2rem;margin-top:3.4rem;padding-top:1.6rem;border-top:1px solid var(--line);max-width:640px}
+  .hero-meta div strong{display:block;font-family:var(--serif);font-size:1.35rem;font-weight:500;color:var(--paper)}
+  .hero-meta div span{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+  /* Sections */
+  section{padding:7rem 0}
+  .section-head{max-width:680px;margin-bottom:3.2rem}
+  .section-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(2.2rem,5vw,3.6rem);line-height:1.08;margin:.9rem 0 1rem}
+  .section-head h2 em{font-style:italic;color:var(--gold-2);font-weight:300}
+  .section-head p{color:var(--muted);font-size:1.05rem}
+  .light{background:var(--paper);color:var(--ink)}
+  .light .section-head p{color:#5A5344}
+  .light .eyebrow{color:#B45309}
+
+  /* Intro */
+  .intro-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:4rem;align-items:start}
+  @media(max-width:860px){.intro-grid{grid-template-columns:1fr;gap:2rem}}
+  .intro-grid .big{font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.15rem);line-height:1.35;font-weight:400}
+  .intro-grid .big em{color:var(--gold-2);font-style:italic}
+  .intro-copy{color:var(--muted);display:grid;gap:1.1rem}
+  .light .intro-copy{color:#5A5344}
+  .light .intro-grid .big em{color:#B45309}
+
+  /* Cabins */
+  .pricing-note{display:inline-block;border:1px solid rgba(245,158,11,.5);color:var(--gold-2);border-radius:999px;padding:.45rem 1rem;font-size:.8rem;font-weight:700;letter-spacing:.06em;margin-bottom:2.2rem}
+  .cabins{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem}
+  @media(max-width:980px){.cabins{grid-template-columns:1fr;max-width:560px}}
+  .cabin{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;transition:transform .4s ease,border-color .4s ease}
+  .cabin:hover{transform:translateY(-6px);border-color:rgba(245,158,11,.55)}
+  .cabin-visual{height:210px;position:relative;overflow:hidden}
+  .v1{background:linear-gradient(180deg,#1B3A5C 0%,#274B6B 46%,#0A1E33 47%,#08182B 100%)}
+  .v2{background:linear-gradient(180deg,#2A2E3F 0%,#4A4038 48%,#101C2E 49%,#0A1728 100%)}
+  .v3{background:linear-gradient(180deg,#10263F 0%,#31506B 44%,#0C2036 45%,#08182B 100%)}
+  .cabin-visual::after{content:"";position:absolute;left:50%;bottom:18px;transform:translateX(-50%);width:86px;height:62px;background:linear-gradient(180deg,#F7F1E5 0 18%,#D9C9A8 19% 100%);clip-path:polygon(50% 0,100% 42%,92% 42%,92% 100%,8% 100%,8% 42%,0 42%)}
+  .cabin-visual i{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);width:14px;height:20px;background:var(--gold-2);border-radius:2px;z-index:2}
+  .cabin-body{padding:1.8rem;display:flex;flex-direction:column;gap:.85rem;flex:1}
+  .cabin-body h3{font-family:var(--serif);font-size:1.65rem;font-weight:500}
+  .cabin-body p{color:var(--muted);font-size:.97rem;flex:1}
+  .cabin-specs{display:flex;gap:1.2rem;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);border-top:1px solid var(--line);padding-top:1rem}
+  .price{display:flex;align-items:baseline;gap:.5rem}
+  .price strong{font-family:var(--serif);font-size:1.9rem;font-weight:500;color:var(--paper)}
+  .price span{color:var(--muted);font-size:.85rem}
+  .price small{display:block;width:100%;color:var(--gold-2);font-size:.75rem;letter-spacing:.05em}
+
+  /* Gallery */
+  .gallery{display:grid;grid-template-columns:repeat(12,1fr);gap:1.2rem}
+  .panel{border-radius:18px;overflow:hidden;position:relative;min-height:260px;display:flex;align-items:flex-end;padding:1.4rem}
+  .panel figcaption{position:relative;z-index:2}
+  .panel figcaption strong{display:block;font-family:var(--serif);font-size:1.3rem;font-weight:500}
+  .panel figcaption span{color:var(--paper-soft);font-size:.88rem}
+  .p-a{grid-column:span 7;background:linear-gradient(180deg,#0E2A47 0%,#3B5A74 52%,#C98A3B 53%,#7A4E22 78%,#241708 100%)}
+  .p-b{grid-column:span 5;background:linear-gradient(200deg,#081A33 0%,#17395C 55%,#0A1B30 56%,#060F1E 100%)}
+  .p-c{grid-column:span 5;background:linear-gradient(180deg,#2E2620 0%,#6B5636 50%,#1A140C 51%,#0D0A06 100%)}
+  .p-d{grid-column:span 7;background:linear-gradient(165deg,#0B2138 0%,#28506E 46%,#E9D8A6 47%,#B98A44 62%,#33200E 100%)}
+  @media(max-width:860px){.p-a,.p-b,.p-c,.p-d{grid-column:span 12}}
+  .panel::before{content:"";position:absolute;inset:auto 0 0 0;height:55%;background:linear-gradient(180deg,transparent,rgba(6,15,30,.72))}
+
+  /* Amenities */
+  .amenities{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem}
+  @media(max-width:980px){.amenities{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.amenities{grid-template-columns:1fr}}
+  .amenity{border:1px solid #DDD2BC;border-radius:16px;padding:1.6rem;background:#FFFDF7}
+  .amenity .num{font-family:var(--serif);color:#B45309;font-size:.95rem}
+  .amenity h3{font-family:var(--serif);font-weight:500;font-size:1.3rem;margin:.5rem 0 .45rem}
+  .amenity p{color:#5A5344;font-size:.93rem}
+
+  /* Booking */
+  .booking{background:linear-gradient(180deg,var(--night) 0%,var(--night-2) 100%)}
+  .booking-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+  @media(max-width:860px){.booking-grid{grid-template-columns:1fr;gap:2.4rem}}
+  .booking-copy p{color:var(--muted);margin-top:1rem;max-width:440px}
+  .booking-copy ul{list-style:none;margin-top:1.8rem;display:grid;gap:.8rem;color:var(--paper-soft)}
+  .booking-copy li::before{content:"";display:inline-block;width:8px;height:8px;background:var(--gold);border-radius:50%;margin-right:.7rem;vertical-align:2px}
+  form{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:2rem;display:grid;gap:1.1rem}
+  label{font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:grid;gap:.45rem}
+  input,select{background:#081A33;border:1px solid var(--line);border-radius:10px;color:var(--paper);padding:.85rem 1rem;font-family:var(--sans);font-size:1rem;width:100%;color-scheme:dark}
+  input:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  @media(max-width:520px){.form-row{grid-template-columns:1fr}}
+  form .btn{width:100%;cursor:pointer;font-family:var(--sans);text-align:center}
+  .demo-note{display:none;border:1px solid rgba(245,158,11,.6);background:rgba(245,158,11,.10);color:var(--paper-soft);border-radius:12px;padding:1rem 1.1rem;font-size:.93rem}
+  .demo-note.show{display:block}
+  .demo-note strong{color:var(--gold-2)}
+
+  /* Location */
+  .location-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem}
+  @media(max-width:860px){.location-grid{grid-template-columns:1fr;gap:2rem}}
+  .route{border-top:1px solid var(--line);padding:1.4rem 0;display:flex;gap:1.6rem}
+  .route:last-child{border-bottom:1px solid var(--line)}
+  .route strong{font-family:var(--serif);font-weight:500;font-size:1.2rem;min-width:118px;color:var(--gold-2)}
+  .route p{color:var(--muted)}
+  .location-copy p{color:var(--muted);margin-top:1rem}
+
+  footer{border-top:1px solid var(--line);padding:3.2rem 0 2.6rem;background:#060F1E}
+  .footer-grid{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2rem;align-items:flex-start}
+  footer .brand{font-size:1.5rem}
+  footer nav{display:flex;gap:1.8rem;font-size:.88rem;color:var(--muted)}
+  footer nav a:hover{color:var(--gold-2)}
+  .footer-note{margin-top:2.4rem;padding-top:1.4rem;border-top:1px solid var(--line);color:var(--muted-2);font-size:.86rem}
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="wrap nav">
+    <a class="brand" href="#top">Pinehaven <span>Retreat</span><span class="badge">CONCEPT</span></a>
+    <nav class="nav-links">
+      <a href="#cabins">Cabins</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#amenities">Amenities</a>
+      <a href="#location">Getting Here</a>
+    </nav>
+    <a class="nav-cta" href="#book">Plan a Stay</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-sky"></div>
+    <div class="moon" id="moon"></div>
+    <div class="ridge back" data-parallax="0.12"></div>
+    <div class="ridge front" data-parallax="0.22"></div>
+    <div class="pines"></div>
+    <div class="wrap hero-inner">
+      <p class="eyebrow reveal">A small cabin retreat, tucked into the pines</p>
+      <h1 class="reveal d1">Slow down.<br>The forest is <em>in no hurry.</em></h1>
+      <p class="lede reveal d2">Pinehaven is a quiet cluster of hand finished cabins at the end of a gravel lane, where mornings start with woodsmoke and strong coffee, and evenings end under a sky full of stars.</p>
+      <div class="hero-actions reveal d3">
+        <a class="btn" href="#cabins">See the cabins</a>
+        <a class="btn ghost" href="#book">Check your dates</a>
+      </div>
+      <div class="hero-meta reveal d3">
+        <div><strong>Three cabins</strong><span>Each one private</span></div>
+        <div><strong>Wood fired</strong><span>Stoves and soaking tub</span></div>
+        <div><strong>No screens</strong><span>By design, mostly</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Intro -->
+  <section>
+    <div class="wrap intro-grid">
+      <p class="big reveal">Some places ask you to do more. Pinehaven asks for less. Fewer plans, slower breakfasts, longer walks, and <em>one good book</em> you actually finish.</p>
+      <div class="intro-copy reveal d1">
+        <p>The retreat sits on a gentle slope above a creek, surrounded by tall pines that keep the air cool even in high summer. Each cabin faces the trees, not its neighbours, so your porch feels like your own small clearing.</p>
+        <p>Days here are simple on purpose. Walk the loop trail before lunch, soak in the cedar tub as the light fades, then cook something unhurried in a kitchen that is small but properly equipped.</p>
+        <p>It is not a resort, and that is the point. It is a place to rest well, eat simply, and hear yourself think again.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cabins -->
+  <section id="cabins" style="padding-top:2rem">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Stay with us</p>
+        <h2>Three cabins, <em>three moods.</em></h2>
+        <p>Every cabin has a wood stove, a deep porch, blackout quiet at night, and linen that smells faintly of cedar. Pick the one that sounds like your kind of weekend.</p>
+      </div>
+      <p class="pricing-note reveal">Sample concept pricing, shown for design purposes only</p>
+      <div class="cabins">
+        <article class="cabin reveal">
+          <div class="cabin-visual v1"><i></i></div>
+          <div class="cabin-body">
+            <h3>The Lookout</h3>
+            <p>Perched highest on the slope, with a wraparound porch made for sunrise. A reading chair by the window, a soaking tub out back, and the best seat in the valley when storms roll through.</p>
+            <div class="price"><strong>$185</strong><span>per night</span></div>
+            <p class="price"><small>Sample concept price</small></p>
+            <div class="cabin-specs"><span>Sleeps 2</span><span>1 bedroom</span><span>Soaking tub</span></div>
+          </div>
+        </article>
+        <article class="cabin reveal d1">
+          <div class="cabin-visual v2"><i></i></div>
+          <div class="cabin-body">
+            <h3>The Hearth</h3>
+            <p>Our warmest cabin, built around a stone fireplace you will light on the first night and keep going all weekend. Best for slow cooks, long talks, and board games that run past midnight.</p>
+            <div class="price"><strong>$220</strong><span>per night</span></div>
+            <p class="price"><small>Sample concept price</small></p>
+            <div class="cabin-specs"><span>Sleeps 4</span><span>2 bedrooms</span><span>Fireplace</span></div>
+          </div>
+        </article>
+        <article class="cabin reveal d2">
+          <div class="cabin-visual v3"><i></i></div>
+          <div class="cabin-body">
+            <h3>Creekside</h3>
+            <p>Closest to the water, where the creek does the talking and the frogs handle the evening entertainment. Fall asleep to running water, and wake to mist sitting low over the bank.</p>
+            <div class="price"><strong>$165</strong><span>per night</span></div>
+            <p class="price"><small>Sample concept price</small></p>
+            <div class="cabin-specs"><span>Sleeps 3</span><span>1 bedroom</span><span>Creek view</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section id="gallery" style="padding-top:2rem">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">The place, in colour</p>
+        <h2>Moments the pines <em>keep for you.</em></h2>
+        <p>A small visual tour of the retreat through the day, from first light on the ridge to the last lamp in the window.</p>
+      </div>
+      <div class="gallery">
+        <figure class="panel p-a reveal"><figcaption><strong>First light over the ridge</strong><span>The valley warms up slowly, and so can you.</span></figcaption></figure>
+        <figure class="panel p-b reveal d1"><figcaption><strong>A clear night, most nights</strong><span>No town glare, just stars and stove smoke.</span></figcaption></figure>
+        <figure class="panel p-c reveal"><figcaption><strong>The porch at golden hour</strong><span>Tea, a blanket, and nowhere else to be.</span></figcaption></figure>
+        <figure class="panel p-d reveal d1"><figcaption><strong>Late afternoon on the creek</strong><span>Cold water, warm stones, quiet company.</span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- Amenities -->
+  <section id="amenities" class="light">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Included with every stay</p>
+        <h2>Simple comforts, <em>done properly.</em></h2>
+        <p>Nothing flashy, nothing fussy. Just the things that make a cabin stay feel easy from the moment you arrive.</p>
+      </div>
+      <div class="amenities">
+        <div class="amenity reveal"><span class="num">01</span><h3>Wood stoves</h3><p>Stocked firewood and kindling in every cabin, plus a quick lesson if it is your first fire.</p></div>
+        <div class="amenity reveal d1"><span class="num">02</span><h3>Cedar soaking tub</h3><p>A shared wood fired tub by the creek, bookable in private evening slots.</p></div>
+        <div class="amenity reveal d2"><span class="num">03</span><h3>Proper kitchens</h3><p>Sharp knives, heavy pans, olive oil, salt, and coffee beans from a roaster down the road.</p></div>
+        <div class="amenity reveal d3"><span class="num">04</span><h3>Breakfast basket</h3><p>Fresh bread, eggs, butter, and jam delivered to your porch each morning.</p></div>
+        <div class="amenity reveal"><span class="num">05</span><h3>Loop trail</h3><p>A gentle two mile trail through the pines, with benches placed exactly where the view opens up.</p></div>
+        <div class="amenity reveal d1"><span class="num">06</span><h3>Fire pit circle</h3><p>A shared fire pit with seating, dry wood, and marshmallow sticks that are always slightly too short.</p></div>
+        <div class="amenity reveal d2"><span class="num">07</span><h3>Reading library</h3><p>Shelves of well loved paperbacks in every cabin. Take one home, leave one behind.</p></div>
+        <div class="amenity reveal d3"><span class="num">08</span><h3>Quiet hours</h3><p>The retreat settles at ten each night, so the loudest sound is usually the creek.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Booking -->
+  <section id="book" class="booking">
+    <div class="wrap booking-grid">
+      <div class="booking-copy reveal">
+        <p class="eyebrow">Plan a stay</p>
+        <div class="section-head" style="margin-bottom:0">
+          <h2>Pick your dates, <em>we will keep the porch light on.</em></h2>
+        </div>
+        <p>Choose a cabin window that suits you, tell us who is coming, and we would confirm the details personally. No instant checkout, no rush.</p>
+        <ul>
+          <li>Two night minimum, because one night is never enough</li>
+          <li>Check in from 3 pm, check out by 11 am</li>
+          <li>Dogs are welcome in Creekside, with notice</li>
+        </ul>
+      </div>
+      <form id="bookingForm" class="reveal d1" novalidate>
+        <div class="form-row">
+          <label>Check in<input type="date" name="checkin" required></label>
+          <label>Check out<input type="date" name="checkout" required></label>
+        </div>
+        <div class="form-row">
+          <label>Guests
+            <select name="guests" required>
+              <option value="">Select guests</option>
+              <option>1 guest</option>
+              <option>2 guests</option>
+              <option>3 guests</option>
+              <option>4 guests</option>
+            </select>
+          </label>
+          <label>Cabin
+            <select name="cabin">
+              <option>No preference</option>
+              <option>The Lookout</option>
+              <option>The Hearth</option>
+              <option>Creekside</option>
+            </select>
+          </label>
+        </div>
+        <label>Your name<input type="text" name="name" placeholder="Full name" autocomplete="name"></label>
+        <button class="btn" type="submit">Request these dates</button>
+        <div class="demo-note" id="demoNote" role="status"><strong>Concept demo:</strong> thanks for trying the form. This is a design showcase, so no booking was sent and no dates were reserved. In a live version, this is where a friendly confirmation would appear.</div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Location -->
+  <section id="location">
+    <div class="wrap location-grid">
+      <div class="location-copy reveal">
+        <p class="eyebrow">Location and getting here</p>
+        <div class="section-head" style="margin-bottom:0">
+          <h2>Close enough to reach, <em>far enough to matter.</em></h2>
+        </div>
+        <p>Pinehaven sits at the end of a maintained gravel lane in pine country, the kind of drive where the signal fades about ten minutes before you arrive, and nobody minds.</p>
+        <p>The nearest village has a bakery, a small grocery, and a fuel station. Stock up there, because once you are settled on the porch, you will not want to leave for supplies.</p>
+        <p>In winter, the lane is ploughed but a vehicle with good clearance is a wise idea. In every other season, any ordinary car manages it comfortably.</p>
+      </div>
+      <div class="reveal d1">
+        <div class="route"><strong>By car</strong><p>About two hours from the city on the valley highway, then twenty minutes of winding pine roads to our lane.</p></div>
+        <div class="route"><strong>By train</strong><p>The nearest station is in the village. Let us know your arrival time and we can arrange a lift for the last stretch.</p></div>
+        <div class="route"><strong>By bus</strong><p>Coaches stop at the village square twice a day. The walk from there is lovely but long, so a pickup is the better plan.</p></div>
+        <div class="route"><strong>On arrival</strong><p>Park by the barn, follow the lanterns to your cabin, and find the kettle already filled. That part is tradition.</p></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <a class="brand" href="#top">Pinehaven <span>Retreat</span></a>
+      <nav>
+        <a href="#cabins">Cabins</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#amenities">Amenities</a>
+        <a href="#book">Book</a>
+      </nav>
+    </div>
+    <p class="footer-note">Concept website &mdash; designed &amp; built by AlphaFlux AI (Gul Sehar) as a design showcase.</p>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var header = document.getElementById('siteHeader');
+    var layers = document.querySelectorAll('[data-parallax]');
+    var moon = document.getElementById('moon');
+    function onScroll(){
+      var y = window.scrollY || 0;
+      header.classList.toggle('scrolled', y > 24);
+      if (y < window.innerHeight * 1.2){
+        layers.forEach(function(el){
+          var speed = parseFloat(el.getAttribute('data-parallax')) || 0.15;
+          el.style.transform = 'translateY(' + (y * speed) + 'px)';
+        });
+        if (moon){ moon.style.transform = 'translateY(' + (y * 0.06) + 'px)'; }
+      }
+    }
+    window.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {threshold: 0.12, rootMargin: '0px 0px -40px 0px'});
+    document.querySelectorAll('.reveal').forEach(function(el){ observer.observe(el); });
+
+    var form = document.getElementById('bookingForm');
+    var note = document.getElementById('demoNote');
+    form.addEventListener('submit', function(event){
+      event.preventDefault();
+      note.classList.add('show');
+      note.scrollIntoView({behavior:'smooth', block:'nearest'});
+    });
+  })();
+</script>
+</body>
+</html>

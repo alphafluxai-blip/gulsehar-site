@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuickCast — Record. Explain. Share. | AlphaFlux AI</title>
+<meta name="description" content="QuickCast is a Loom-style screen recorder built by AlphaFlux AI: screen + camera bubble, live transcript, instant download. No install, no upload — everything runs in your browser.">
+<style>
+  :root{
+    --bg:#0a0a0b; --panel:#131315; --panel2:#1a1a1e; --line:#26262b;
+    --gold:#d4af37; --gold2:#f0d060; --text:#f4f1e8; --muted:#9b978c; --red:#e5484d;
+    --radius:16px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--bg); color:var(--text); font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; min-height:100vh}
+  a{color:var(--gold2)}
+  header{display:flex; align-items:center; justify-content:space-between; padding:18px 28px; border-bottom:1px solid var(--line)}
+  .logo{display:flex; align-items:center; gap:12px; font-weight:800; font-size:20px; letter-spacing:.3px}
+  .logo-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#8a6d1f);display:grid;place-items:center;color:#0a0a0b;font-size:19px;font-weight:900}
+  .badge{font-size:11px; color:#0a0a0b; background:var(--gold); padding:3px 9px; border-radius:999px; font-weight:700}
+  .by{color:var(--muted); font-size:13px}
+  main{max-width:1180px; margin:0 auto; padding:26px 20px 60px}
+  .hero h1{font-size:34px; line-height:1.15; font-weight:800}
+  .hero h1 span{color:var(--gold)}
+  .hero p{color:var(--muted); margin-top:8px; max-width:640px; font-size:15px; line-height:1.55}
+  .layout{display:grid; grid-template-columns:1fr 320px; gap:20px; margin-top:24px}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}}
+  .stage{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:16px}
+  .canvas-wrap{position:relative; background:#000; border-radius:12px; overflow:hidden; aspect-ratio:16/9}
+  canvas{width:100%; height:100%; display:block; cursor:grab}
+  canvas:active{cursor:grabbing}
+  .placeholder{position:absolute; inset:0; display:grid; place-items:center; text-align:center; color:var(--muted); padding:24px; font-size:14px; line-height:1.6}
+  .countdown{position:absolute; inset:0; display:none; place-items:center; font-size:110px; font-weight:900; color:var(--gold); background:rgba(0,0,0,.55)}
+  .recbar{display:flex; align-items:center; gap:10px; margin-top:14px; flex-wrap:wrap}
+  .dot{width:11px;height:11px;border-radius:50%;background:#3a3a40}
+  .dot.live{background:var(--red); animation:pulse 1.1s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  .timer{font-variant-numeric:tabular-nums; font-weight:700; font-size:17px; min-width:58px}
+  .status{color:var(--muted); font-size:13px}
+  button{border:1px solid var(--line); background:var(--panel2); color:var(--text); padding:10px 16px; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer}
+  button:hover{border-color:var(--gold)}
+  button:disabled{opacity:.4; cursor:not-allowed}
+  button.primary{background:linear-gradient(135deg,var(--gold),#a8842a); color:#0a0a0b; border:none}
+  button.danger{background:var(--red); color:#fff; border:none}
+  .panel{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:18px; height:fit-content}
+  .panel h3{font-size:14px; text-transform:uppercase; letter-spacing:1px; color:var(--gold); margin-bottom:14px}
+  .field{margin-bottom:14px}
+  .field label{display:block; font-size:13px; color:var(--muted); margin-bottom:6px}
+  .field input[type=text], .field select{width:100%; background:var(--panel2); border:1px solid var(--line); color:var(--text); border-radius:9px; padding:10px; font-size:14px}
+  .seg{display:flex; gap:6px}
+  .seg button{flex:1; padding:9px 4px; font-size:13px}
+  .seg button.active{background:var(--gold); color:#0a0a0b; border-color:var(--gold)}
+  .toggle{display:flex; align-items:center; justify-content:space-between; font-size:14px; padding:7px 0}
+  .toggle input{width:18px; height:18px; accent-color:var(--gold)}
+  .result{display:none; margin-top:20px; background:var(--panel); border:1px solid var(--gold); border-radius:var(--radius); padding:18px}
+  .result video{width:100%; border-radius:12px; background:#000}
+  .result .row{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap}
+  .transcript{margin-top:20px; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:18px}
+  .transcript h3{font-size:14px; text-transform:uppercase; letter-spacing:1px; color:var(--gold); margin-bottom:10px}
+  .transcript .box{min-height:90px; max-height:220px; overflow:auto; background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:12px; font-size:14px; line-height:1.65; white-space:pre-wrap}
+  .transcript .box:empty::before{content:"Your live transcript appears here while you record (Chrome, mic on)."; color:var(--muted)}
+  .hint{font-size:12px; color:var(--muted); margin-top:10px; line-height:1.55}
+  footer{border-top:1px solid var(--line); padding:20px 28px; color:var(--muted); font-size:13px; text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><div class="logo-mark">Q</div> QuickCast <span class="badge">PORTFOLIO BUILD</span></div>
+  <div class="by">Built by <b style="color:var(--gold2)">AlphaFlux AI</b> — a clean-room Loom-style recorder</div>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>Record your screen. <span>Explain it like you are in the room.</span></h1>
+    <p>Screen + camera bubble burned into one video, live transcript while you talk, and an instant download when you stop. No install, no sign-up, no upload — recording never leaves your browser until you save it.</p>
+  </section>
+
+  <div class="layout">
+    <section class="stage">
+      <div class="canvas-wrap">
+        <canvas id="stage" width="1280" height="720"></canvas>
+        <div class="placeholder" id="placeholder">Choose your sources on the right, then press <b>&nbsp;Start recording</b>.<br>Tip: you can drag the camera bubble anywhere on the preview.</div>
+        <div class="countdown" id="countdown">3</div>
+      </div>
+      <div class="recbar">
+        <div class="dot" id="dot"></div>
+        <div class="timer" id="timer">00:00</div>
+        <button class="primary" id="btnStart">● Start recording</button>
+        <button id="btnPause" disabled>Pause</button>
+        <button class="danger" id="btnStop" disabled>■ Stop</button>
+        <span class="status" id="status">Ready</span>
+      </div>
+
+      <div class="result" id="result">
+        <h3 style="color:var(--gold); letter-spacing:1px; font-size:14px; text-transform:uppercase">Your recording</h3>
+        <video id="playback" controls style="margin-top:12px"></video>
+        <div class="row">
+          <button class="primary" id="btnDownload">⬇ Download video (.webm)</button>
+          <button id="btnCopyTranscript">Copy transcript</button>
+          <button id="btnDownloadTranscript">⬇ Transcript (.txt)</button>
+          <button id="btnRetake">Record another</button>
+        </div>
+      </div>
+
+      <div class="transcript">
+        <h3>Live transcript</h3>
+        <div class="box" id="transcriptBox"></div>
+        <p class="hint">Transcript uses your browser's built-in speech recognition (Chrome / Edge). Pick Urdu or English on the right — mixed speakers can switch before recording. Nothing is sent to a QuickCast server; recognition is handled by your browser.</p>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <h3>Recording setup</h3>
+      <div class="field">
+        <label>Video title</label>
+        <input type="text" id="title" placeholder="e.g. Client demo — invoice automation">
+      </div>
+      <div class="field">
+        <label>Mode</label>
+        <div class="seg" id="modeSeg">
+          <button data-mode="screen-cam" class="active">Screen + Cam</button>
+          <button data-mode="screen">Screen only</button>
+          <button data-mode="cam">Cam only</button>
+        </div>
+      </div>
+      <div class="toggle"><span>Microphone</span><input type="checkbox" id="optMic" checked></div>
+      <div class="toggle"><span>Camera bubble</span><input type="checkbox" id="optBubble" checked></div>
+      <div class="field" style="margin-top:12px">
+        <label>Bubble size</label>
+        <div class="seg" id="sizeSeg">
+          <button data-size="0.11">S</button>
+          <button data-size="0.16" class="active">M</button>
+          <button data-size="0.23">L</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Transcript language</label>
+        <select id="lang">
+          <option value="en-US">English (US)</option>
+          <option value="en-GB">English (UK)</option>
+          <option value="ur-PK">Urdu (Pakistan)</option>
+          <option value="en-PK">English (Pakistan)</option>
+        </select>
+      </div>
+      <p class="hint"><b style="color:var(--text)">How it works:</b> your screen and camera are composited live onto a canvas in your browser, the bubble is burned into the exported video (exactly like Loom), and the file is generated locally as a .webm you can send anywhere — WhatsApp, email, or a client.</p>
+      <p class="hint">Made for async client demos, bug reports, SOP walkthroughs and 3-minute prospect videos.</p>
+    </aside>
+  </div>
+</main>
+
+<footer>QuickCast — a clean-room portfolio rebuild inspired by Loom's core workflow. Built by AlphaFlux AI · Runs 100% in-browser · No data uploaded</footer>
+
+<video id="screenVideo" autoplay muted playsinline style="display:none"></video>
+<video id="camVideo" autoplay muted playsinline style="display:none"></video>
+
+<script>
+(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const canvas = $("stage"), ctx = canvas.getContext("2d");
+  const screenVideo = $("screenVideo"), camVideo = $("camVideo");
+
+  let mode = "screen-cam";
+  let bubbleSize = 0.16;                 // fraction of canvas width (diameter)
+  let bubble = { x: null, y: null };     // centre, set on first draw
+  let dragging = false, dragOff = {x:0,y:0};
+
+  let screenStream=null, camStream=null, micStream=null, mixedStream=null;
+  let recorder=null, chunks=[], rafId=null;
+  let state = "idle";                    // idle | recording | paused
+  let startStamp=0, elapsedBefore=0, timerInt=null;
+  let finalBlob=null, finalUrl=null;
+  let recognition=null, transcriptFinal="";
+
+  // ---------- UI helpers ----------
+  function setStatus(t){ $("status").textContent = t; }
+  function fmt(ms){ const s=Math.floor(ms/1000); return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0"); }
+  function elapsed(){ return state==="recording" ? elapsedBefore + (Date.now()-startStamp) : elapsedBefore; }
+
+  document.querySelectorAll("#modeSeg button").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      document.querySelectorAll("#modeSeg button").forEach(x=>x.classList.remove("active"));
+      b.classList.add("active"); mode = b.dataset.mode;
+    });
+  });
+  document.querySelectorAll("#sizeSeg button").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      document.querySelectorAll("#sizeSeg button").forEach(x=>x.classList.remove("active"));
+      b.classList.add("active"); bubbleSize = parseFloat(b.dataset.size);
+    });
+  });
+
+  // ---------- Bubble dragging ----------
+  function canvasPos(e){
+    const r = canvas.getBoundingClientRect();
+    return { x:(e.clientX-r.left)/r.width*canvas.width, y:(e.clientY-r.top)/r.height*canvas.height };
+  }
+  canvas.addEventListener("pointerdown", e=>{
+    if(!$("optBubble").checked || mode==="screen") return;
+    const p = canvasPos(e), r = bubbleSize*canvas.width/2;
+    if(bubble.x!==null && Math.hypot(p.x-bubble.x, p.y-bubble.y) <= r){
+      dragging = true; dragOff = {x:p.x-bubble.x, y:p.y-bubble.y};
+      canvas.setPointerCapture(e.pointerId);
+    }
+  });
+  canvas.addEventListener("pointermove", e=>{
+    if(!dragging) return;
+    const p = canvasPos(e), r = bubbleSize*canvas.width/2;
+    bubble.x = Math.min(Math.max(p.x-dragOff.x, r), canvas.width-r);
+    bubble.y = Math.min(Math.max(p.y-dragOff.y, r), canvas.height-r);
+  });
+  ["pointerup","pointercancel"].forEach(ev=>canvas.addEventListener(ev, ()=>{ dragging=false; }));
+
+  // ---------- Compositing ----------
+  function drawCover(video, dx, dy, dw, dh){
+    const vw = video.videoWidth, vh = video.videoHeight;
+    if(!vw || !vh) return;
+    const scale = Math.max(dw/vw, dh/vh);
+    const sw = dw/scale, sh = dh/scale;
+    ctx.drawImage(video, (vw-sw)/2, (vh-sh)/2, sw, sh, dx, dy, dw, dh);
+  }
+  function drawFrame(){
+    ctx.fillStyle = "#000"; ctx.fillRect(0,0,canvas.width,canvas.height);
+    const W = canvas.width, H = canvas.height;
+
+    if(mode === "cam"){
+      if(camVideo.readyState >= 2) drawCover(camVideo, 0, 0, W, H);
+    } else {
+      if(screenVideo.readyState >= 2) drawCover(screenVideo, 0, 0, W, H);
+      if($("optBubble").checked && mode === "screen-cam" && camVideo.readyState >= 2){
+        const d = bubbleSize * W, r = d/2;
+        if(bubble.x === null){ bubble.x = W - r - 28; bubble.y = H - r - 28; }
+        ctx.save();
+        ctx.beginPath(); ctx.arc(bubble.x, bubble.y, r, 0, Math.PI*2); ctx.clip();
+        drawCover(camVideo, bubble.x-r, bubble.y-r, d, d);
+        ctx.restore();
+        ctx.beginPath(); ctx.arc(bubble.x, bubble.y, r, 0, Math.PI*2);
+        ctx.lineWidth = 5; ctx.strokeStyle = "#d4af37"; ctx.stroke();
+      }
+    }
+    if(state === "recording" || state === "paused"){
+      rafId = requestAnimationFrame(drawFrame);
+    }
+  }
+
+  // ---------- Speech recognition ----------
+  function startRecognition(){
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SR) return;
+    try{
+      recognition = new SR();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = $("lang").value;
+      recognition.onresult = e=>{
+        let interim = "";
+        for(let i=e.resultIndex; i<e.results.length; i++){
+          const txt = e.results[i][0].transcript;
+          if(e.results[i].isFinal){ transcriptFinal += txt.trim() + " "; }
+          else interim += txt;
+        }
+        $("transcriptBox").textContent = transcriptFinal + interim;
+        $("transcriptBox").scrollTop = $("transcriptBox").scrollHeight;
+      };
+      recognition.onend = ()=>{ if(state==="recording"){ try{ recognition.start(); }catch(_){} } };
+      recognition.start();
+    }catch(_){ recognition = null; }
+  }
+  function stopRecognition(){ if(recognition){ try{ recognition.onend=null; recognition.stop(); }catch(_){} recognition=null; } }
+
+  // ---------- Recording ----------
+  function pickMime(){
+    const opts = ["video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"];
+    for(const o of opts){ if(window.MediaRecorder && MediaRecorder.isTypeSupported(o)) return o; }
+    return "";
+  }
+  function countdown(){
+    return new Promise(res=>{
+      const el = $("countdown"); el.style.display="grid";
+      let n = 3; el.textContent = n;
+      const iv = setInterval(()=>{ n--; if(n<=0){ clearInterval(iv); el.style.display="none"; res(); } else el.textContent=n; }, 750);
+    });
+  }
+
+  async function start(){
+    $("btnStart").disabled = true;
+    setStatus("Asking for permissions…");
+    try{
+      if(mode !== "cam"){
+        screenStream = await navigator.mediaDevices.getDisplayMedia({ video:{ frameRate:30 }, audio:false });
+        screenVideo.srcObject = screenStream;
+        await screenVideo.play();
+        screenStream.getVideoTracks()[0].addEventListener("ended", ()=>{ if(state!=="idle") stop(); });
+      }
+      if(mode !== "screen"){
+        camStream = await navigator.mediaDevices.getUserMedia({ video:{ width:1280, height:720 }, audio:false });
+        camVideo.srcObject = camStream;
+        await camVideo.play();
+      }
+      if($("optMic").checked){
+        micStream = await navigator.mediaDevices.getUserMedia({ audio:true });
+      }
+    }catch(err){
+      setStatus("Permission denied or cancelled — try again.");
+      $("btnStart").disabled = false;
+      cleanupStreams();
+      return;
+    }
+
+    $("placeholder").style.display = "none";
+    $("result").style.display = "none";
+    transcriptFinal = ""; $("transcriptBox").textContent = "";
+    state = "recording";                 // start draw loop for the countdown preview
+    drawFrame();
+    await countdown();
+
+    const canvasStream = canvas.captureStream(30);
+    const tracks = [...canvasStream.getVideoTracks()];
+    if(micStream) tracks.push(...micStream.getAudioTracks());
+    mixedStream = new MediaStream(tracks);
+
+    chunks = [];
+    recorder = new MediaRecorder(mixedStream, { mimeType: pickMime(), videoBitsPerSecond: 6_000_000 });
+    recorder.ondataavailable = e=>{ if(e.data.size) chunks.push(e.data); };
+    recorder.onstop = onStopped;
+    recorder.start(250);
+
+    elapsedBefore = 0; startStamp = Date.now();
+    timerInt = setInterval(()=>{ $("timer").textContent = fmt(elapsed()); }, 250);
+    $("dot").classList.add("live");
+    $("btnPause").disabled = false; $("btnStop").disabled = false;
+    setStatus("Recording — the bubble is part of your video");
+    if($("optMic").checked) startRecognition();
+  }
+
+  function pauseResume(){
+    if(state === "recording"){
+      recorder.pause(); stopRecognition();
+      elapsedBefore = elapsed(); state = "paused";
+      $("btnPause").textContent = "Resume"; $("dot").classList.remove("live");
+      setStatus("Paused");
+    } else if(state === "paused"){
+      recorder.resume();
+      startStamp = Date.now(); state = "recording";
+      if($("optMic").checked) startRecognition();
+      $("btnPause").textContent = "Pause"; $("dot").classList.add("live");
+      setStatus("Recording");
+    }
+  }
+
+  function stop(){
+    if(recorder && recorder.state !== "inactive") recorder.stop();
+    stopRecognition();
+  }
+
+  function onStopped(){
+    elapsedBefore = elapsed(); state = "idle";
+    clearInterval(timerInt); cancelAnimationFrame(rafId);
+    $("dot").classList.remove("live");
+    $("btnStart").disabled = false; $("btnPause").disabled = true; $("btnStop").disabled = true;
+    $("btnPause").textContent = "Pause";
+    setStatus("Done — review, download, or record another");
+
+    finalBlob = new Blob(chunks, { type: "video/webm" });
+    if(finalUrl) URL.revokeObjectURL(finalUrl);
+    finalUrl = URL.createObjectURL(finalBlob);
+    $("playback").src = finalUrl;
+    $("result").style.display = "block";
+    cleanupStreams();
+  }
+
+  function cleanupStreams(){
+    [screenStream, camStream, micStream].forEach(s=>{ if(s) s.getTracks().forEach(t=>t.stop()); });
+    screenStream = camStream = micStream = null;
+  }
+
+  function slugTitle(){
+    const t = $("title").value.trim() || "quickcast-recording";
+    return t.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,60) || "quickcast-recording";
+  }
+  function download(name, blob){
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = name; a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
+  }
+
+  $("btnStart").addEventListener("click", start);
+  $("btnPause").addEventListener("click", pauseResume);
+  $("btnStop").addEventListener("click", stop);
+  $("btnDownload").addEventListener("click", ()=>{ if(finalBlob) download(slugTitle()+".webm", finalBlob); });
+  $("btnDownloadTranscript").addEventListener("click", ()=>{
+    const head = ($("title").value.trim() || "QuickCast recording") + "\n" + new Date().toLocaleString() + "\n\n";
+    download(slugTitle()+"-transcript.txt", new Blob([head + ($("transcriptBox").textContent || "")], {type:"text/plain"}));
+  });
+  $("btnCopyTranscript").addEventListener("click", async ()=>{
+    try{ await navigator.clipboard.writeText($("transcriptBox").textContent || ""); setStatus("Transcript copied"); }catch(_){ setStatus("Copy failed — select the text manually"); }
+  });
+  $("btnRetake").addEventListener("click", ()=>{
+    $("result").style.display = "none"; $("placeholder").style.display = "grid";
+    ctx.fillStyle="#000"; ctx.fillRect(0,0,canvas.width,canvas.height);
+    $("timer").textContent = "00:00"; setStatus("Ready");
+  });
+})();
+</script>
+</body>
+</html>
