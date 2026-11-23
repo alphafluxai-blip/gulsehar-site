@@ -480,7 +480,7 @@
 <section class="about scene-dark" id="about" data-theme="dark">
   <div class="wrap about-grid">
     <figure class="about-portrait reveal" data-speed=".3">
-      <img src="assets/portrait-sehar.png" alt="Gul Sehar" loading="lazy">
+      <img src="assets/portrait-sehar-cutout.png" alt="Gul Sehar" loading="lazy">
     </figure>
     <div class="about-copy reveal">
       <p class="label">About · contact</p>
@@ -508,47 +508,48 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="assets/site.js"></script>
-<script>
-  var vapiAssistantId = "2b18f167-0045-4083-a21e-b2b6eea27e73";
-  var vapiPublicKey = "5a0fdeab-d86a-4a0c-b10a-cc2284737c27";
-  var voiceBtn = document.getElementById("voice-demo-btn");
-  var voiceNote = document.getElementById("voice-demo-note");
-  var voiceActive = false;
-  function voiceClient() {
-    var v = window.vapiSDK && window.vapiSDK.vapi;
-    return (v && typeof v.start === "function") ? v : null;
+<button class="voice-float-btn" id="voice-float-btn" type="button" aria-label="Talk to Jenna, live voice demo">
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+  <span id="voice-float-label">Talk to Jenna</span>
+</button>
+<script type="module">
+  import Vapi from "https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.3.9/+esm";
+  var assistantId = "2b18f167-0045-4083-a21e-b2b6eea27e73";
+  var publicKey = "5a0fdeab-d86a-4a0c-b10a-cc2284737c27";
+  var vapi = null;
+  var active = false;
+  var sectionBtn = document.getElementById("voice-demo-btn");
+  var floatBtn = document.getElementById("voice-float-btn");
+  var floatLabel = document.getElementById("voice-float-label");
+  var note = document.getElementById("voice-demo-note");
+  function setActive(on) {
+    active = on;
+    if (sectionBtn) sectionBtn.textContent = on ? "End call" : "Talk to Jenna";
+    if (floatLabel) floatLabel.textContent = on ? "End call" : "Talk to Jenna";
+    if (floatBtn) floatBtn.classList.toggle("is-active", on);
   }
-  if (voiceBtn) {
-    voiceBtn.addEventListener("click", function () {
-      var v = voiceClient();
-      if (v && voiceActive && typeof v.stop === "function") { v.stop(); return; }
-      if (v) { v.start(vapiAssistantId); return; }
-      if (voiceNote) { voiceNote.textContent = "The demo is still loading. Try the call button at the bottom right of your screen."; }
-    });
+  function toggleCall() {
+    if (!vapi) {
+      if (note) note.textContent = "The demo is still loading. Please try again in a moment.";
+      return;
+    }
+    try {
+      if (active) vapi.stop();
+      else vapi.start(assistantId);
+    } catch (e) {
+      if (note) note.textContent = "The call could not start. Please allow microphone access and try again.";
+    }
   }
-  (function (d, t) {
-    var g = document.createElement(t), s = d.getElementsByTagName(t)[0];
-    g.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
-    g.defer = true;
-    g.async = true;
-    s.parentNode.insertBefore(g, s);
-    g.onload = function () {
-      try {
-        window.vapiSDK.run({
-          apiKey: vapiPublicKey,
-          assistant: vapiAssistantId,
-          config: { position: "bottom-right" },
-        });
-      } catch (e) { return; }
-      var v = voiceClient();
-      if (v && typeof v.on === "function") {
-        try {
-          v.on("call-start", function () { voiceActive = true; if (voiceBtn) { voiceBtn.textContent = "End call"; } });
-          v.on("call-end", function () { voiceActive = false; if (voiceBtn) { voiceBtn.textContent = "Talk to Jenna"; } });
-        } catch (e) { /* the floating call button still works */ }
-      }
-    };
-  })(document, "script");
+  if (sectionBtn) sectionBtn.addEventListener("click", toggleCall);
+  if (floatBtn) floatBtn.addEventListener("click", toggleCall);
+  try {
+    vapi = new Vapi(publicKey);
+    vapi.on("call-start", function () { setActive(true); });
+    vapi.on("call-end", function () { setActive(false); });
+    vapi.on("error", function () { setActive(false); if (note) note.textContent = "The call ended with an error. Please try again."; });
+  } catch (e) {
+    if (note) note.textContent = "The voice demo could not load. Please refresh the page.";
+  }
 </script>
 </body>
 </html>

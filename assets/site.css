@@ -226,9 +226,9 @@ dd{font-size:16px;color:var(--dmuted)}
 .products p{margin-bottom:28px}
 .products .link-arrow{margin-top:auto}
 
-.about-grid{display:grid;grid-template-columns:.7fr 1.3fr;gap:clamp(40px,6vw,120px);align-items:start;margin-bottom:clamp(40px,5vw,64px)}
-.about-portrait{aspect-ratio:1/1.2;overflow:hidden;border-radius:4px;border:1px solid var(--dhair);max-width:420px}
-.about-portrait img{width:100%;height:110%;object-fit:cover;object-position:50% 15%}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,120px);align-items:start;margin-bottom:clamp(40px,5vw,64px)}
+.about-portrait{max-width:560px;width:100%;position:sticky;top:120px;filter:drop-shadow(0 24px 48px rgba(0,0,0,.5))}
+.about-portrait img{width:100%;height:auto;display:block}
 .about-copy .label{margin-bottom:22px}
 .about-copy .lede{margin:30px 0 40px}
 .contact-list{list-style:none;display:grid;gap:14px;border-top:1px solid var(--dhair)}
@@ -280,6 +280,10 @@ dd{font-size:16px;color:var(--dmuted)}
 .voice-card dl{margin:22px 0 0}
 .voice-card dt{color:var(--bronze2)}
 .voice-card dd{color:var(--dmuted)}
+.voice-float-btn{position:fixed;right:24px;bottom:24px;z-index:9999;display:inline-flex;align-items:center;gap:10px;background:var(--gold);color:#0F172A;border:1px solid var(--gold);padding:14px 20px;border-radius:999px;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 12px 32px rgba(0,0,0,.45)}
+.voice-float-btn:hover{background:var(--bronze);border-color:var(--bronze);color:#FFF9F3}
+.voice-float-btn.is-active{background:#B3372F;border-color:#B3372F;color:#fff}
+.voice-float-btn svg{flex:none}
 
 @media (max-width:1100px){
   .sys-grid{grid-template-columns:1fr 1fr}.reel-sys{grid-column:span 2}
@@ -310,6 +314,7 @@ dd{font-size:16px;color:var(--dmuted)}
   .sec-head.split,.demo-grid,.svc-grid,.about-grid,.case-body,.concept-grid,.out-grid,.voice-grid{grid-template-columns:1fr}
   .about-grid{grid-template-columns:minmax(0,1fr)}
   .about-grid>*{min-width:0}
+  .about-portrait{position:static;max-width:420px}
   .out,.out.big{grid-column:auto}
   .sys-grid{grid-template-columns:1fr}.reel-sys{grid-column:span 1;grid-template-columns:1fr}.sys-wide{grid-column:auto}
   .reel-mac{max-width:100%;justify-self:stretch}
