@@ -513,7 +513,8 @@
   <span id="voice-float-label">Talk to Jenna</span>
 </button>
 <script type="module">
-  import Vapi from "https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.3.9/+esm";
+  import VapiModule from "https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.3.9/+esm";
+  var Vapi = (VapiModule && VapiModule.default) ? VapiModule.default : VapiModule;
   var assistantId = "2b18f167-0045-4083-a21e-b2b6eea27e73";
   var publicKey = "5a0fdeab-d86a-4a0c-b10a-cc2284737c27";
   var vapi = null;
@@ -544,10 +545,12 @@
   if (floatBtn) floatBtn.addEventListener("click", toggleCall);
   try {
     vapi = new Vapi(publicKey);
+    window.__voiceDemoReady = true;
     vapi.on("call-start", function () { setActive(true); });
     vapi.on("call-end", function () { setActive(false); });
     vapi.on("error", function () { setActive(false); if (note) note.textContent = "The call ended with an error. Please try again."; });
   } catch (e) {
+    window.__voiceDemoError = true;
     if (note) note.textContent = "The voice demo could not load. Please refresh the page.";
   }
 </script>
