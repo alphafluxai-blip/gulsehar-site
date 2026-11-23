@@ -263,6 +263,24 @@ dd{font-size:16px;color:var(--dmuted)}
 .case-next a{font-family:var(--serif);font-size:clamp(24px,2.4vw,36px);color:var(--ink)}
 .case-next a:hover{color:var(--bronze)}
 
+.voice-demo{padding:clamp(64px,7vw,112px) 0}
+.voice-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(40px,6vw,100px);align-items:start}
+.voice-demo .label{margin-bottom:22px}
+.demo-pill{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--bronze2);border:1px solid var(--bronze);padding:4px 10px;border-radius:999px;margin-left:10px;vertical-align:middle}
+.voice-demo .serif-h{margin-bottom:28px}
+.voice-demo .lede{margin-bottom:28px}
+.voice-tries{margin-bottom:32px}
+.voice-tries .label{margin-bottom:12px}
+.try-line{font-family:var(--serif);font-size:20px;line-height:1.4;color:var(--dtext);padding-left:18px;border-left:1px solid var(--bronze);margin:10px 0}
+.voice-note{font-size:13px;color:var(--dmuted);margin-top:16px}
+.voice-card{background:var(--dpanel);border:1px solid var(--dhair);border-radius:12px;padding:clamp(28px,3vw,40px)}
+.voice-card .label{margin-bottom:16px}
+.voice-card h3{font-size:26px;margin-bottom:14px}
+.voice-card p{font-size:15px}
+.voice-card dl{margin:22px 0 0}
+.voice-card dt{color:var(--bronze2)}
+.voice-card dd{color:var(--dmuted)}
+
 @media (max-width:1100px){
   .sys-grid{grid-template-columns:1fr 1fr}.reel-sys{grid-column:span 2}
   .now-list li{grid-template-columns:80px 1fr}.now-list .meta{grid-column:2;text-align:left;padding:0}
@@ -289,7 +307,7 @@ dd{font-size:16px;color:var(--dmuted)}
   .pair .before{background-size:100% 1px;opacity:.55}.pair .after{opacity:1;transform:none}
   .shift-index,.proc-dots{display:none}
   .step .huge{font-size:120px}
-  .sec-head.split,.demo-grid,.svc-grid,.about-grid,.case-body,.concept-grid,.out-grid{grid-template-columns:1fr}
+  .sec-head.split,.demo-grid,.svc-grid,.about-grid,.case-body,.concept-grid,.out-grid,.voice-grid{grid-template-columns:1fr}
   .about-grid{grid-template-columns:minmax(0,1fr)}
   .about-grid>*{min-width:0}
   .out,.out.big{grid-column:auto}

@@ -449,6 +449,34 @@
   </div>
 </section>
 
+<section class="voice-demo scene-dark" id="voice-demo" data-theme="dark">
+  <div class="wrap voice-grid">
+    <div class="reveal">
+      <p class="label">Live demo <span class="demo-pill">Demo</span></p>
+      <h2 class="serif-h">Talk to a live AI receptionist.</h2>
+      <p class="lede">Jenna answers the phones for Summit Comfort, a fictional heating and cooling company in Plano, Texas. Ask her to book a furnace tune-up, or tell her your AC stopped cooling. This is a live demo, so no real appointment is booked.</p>
+      <div class="voice-tries">
+        <p class="label">Try saying</p>
+        <p class="try-line">"Book a furnace tune-up for tomorrow morning."</p>
+        <p class="try-line">"My AC is blowing warm air."</p>
+        <p class="try-line">"How much is a visit?"</p>
+      </div>
+      <button class="btn voice-btn" id="voice-demo-btn" type="button">Talk to Jenna</button>
+      <p class="voice-note" id="voice-demo-note">Your microphone stays on this page. The call runs on Vapi.</p>
+    </div>
+    <div class="voice-card reveal">
+      <p class="label">Jenna · Front desk</p>
+      <h3>Summit Comfort</h3>
+      <p>Heating, Cooling &amp; Plumbing. Plano, Texas, serving Frisco, Allen, McKinney, Richardson and the Dallas-Fort Worth area.</p>
+      <dl>
+        <dt>Hours</dt><dd>Monday to Saturday, 7am to 7pm. Closed Sunday.</dd>
+        <dt>What she does</dt><dd>Takes the call, works out the problem, checks urgency, books the right technician.</dd>
+        <dt>After hours</dt><dd>True emergencies go to the on-call technician. Everything else books for the next business day.</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
 <section class="about scene-dark" id="about" data-theme="dark">
   <div class="wrap about-grid">
     <figure class="about-portrait reveal" data-speed=".3">
@@ -480,5 +508,47 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="assets/site.js"></script>
+<script>
+  var vapiAssistantId = "2b18f167-0045-4083-a21e-b2b6eea27e73";
+  var vapiPublicKey = "5a0fdeab-d86a-4a0c-b10a-cc2284737c27";
+  var voiceBtn = document.getElementById("voice-demo-btn");
+  var voiceNote = document.getElementById("voice-demo-note");
+  var voiceActive = false;
+  function voiceClient() {
+    var v = window.vapiSDK && window.vapiSDK.vapi;
+    return (v && typeof v.start === "function") ? v : null;
+  }
+  if (voiceBtn) {
+    voiceBtn.addEventListener("click", function () {
+      var v = voiceClient();
+      if (v && voiceActive && typeof v.stop === "function") { v.stop(); return; }
+      if (v) { v.start(vapiAssistantId); return; }
+      if (voiceNote) { voiceNote.textContent = "The demo is still loading. Try the call button at the bottom right of your screen."; }
+    });
+  }
+  (function (d, t) {
+    var g = document.createElement(t), s = d.getElementsByTagName(t)[0];
+    g.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+    g.defer = true;
+    g.async = true;
+    s.parentNode.insertBefore(g, s);
+    g.onload = function () {
+      try {
+        window.vapiSDK.run({
+          apiKey: vapiPublicKey,
+          assistant: vapiAssistantId,
+          config: { position: "bottom-right" },
+        });
+      } catch (e) { return; }
+      var v = voiceClient();
+      if (v && typeof v.on === "function") {
+        try {
+          v.on("call-start", function () { voiceActive = true; if (voiceBtn) { voiceBtn.textContent = "End call"; } });
+          v.on("call-end", function () { voiceActive = false; if (voiceBtn) { voiceBtn.textContent = "Talk to Jenna"; } });
+        } catch (e) { /* the floating call button still works */ }
+      }
+    };
+  })(document, "script");
+</script>
 </body>
 </html>
