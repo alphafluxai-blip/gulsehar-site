@@ -284,6 +284,10 @@ dd{font-size:16px;color:var(--dmuted)}
 .voice-float-btn:hover{background:var(--bronze);border-color:var(--bronze);color:#FFF9F3}
 .voice-float-btn.is-active{background:#B3372F;border-color:#B3372F;color:#fff}
 .voice-float-btn svg{flex:none}
+.btn-wa{background:#25D366;border-color:#25D366;color:#08281A}
+.btn-wa:hover{background:#1FB457;border-color:#1FB457;color:#08281A}
+.about-cta{margin-top:36px}
+.cta-note{font-size:13px;color:var(--dmuted);margin-top:14px}
 
 @media (max-width:1100px){
   .sys-grid{grid-template-columns:1fr 1fr}.reel-sys{grid-column:span 2}
