@@ -301,6 +301,17 @@ dd{font-size:16px;color:var(--dmuted)}
   .contact-list a{min-width:0;overflow-wrap:anywhere}
   .case-hero{min-height:70vh;padding-top:140px}
 }
+@media (min-width:901px) and (max-height:820px){
+  .hero-copy{padding-bottom:6vh}
+  .hero-copy .label{margin-bottom:16px}
+  .hero-h{font-size:clamp(40px,5.4vw,68px)}
+  .hero-copy .lede{margin-top:18px}
+  .hero-copy .cta{margin-top:20px}
+  .hero-cut .cut{height:80vh}
+  .hero-tag{display:none}
+  .proof{padding-top:16px;padding-bottom:20px}
+  .proof .num{font-size:clamp(28px,2.6vw,40px)}
+}
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
   .lines .line>span,.reveal{transform:none;opacity:1}
