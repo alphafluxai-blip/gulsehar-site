@@ -1,3 +1,5 @@
+DIVERTED VARIANT — FOR COMPARISON ONLY. This copy (gulsehar-site-diverted/) reframes the portfolio around building software products, vibe coding, automation, Claude Code and GitHub. It is NOT the live site. The live site is gulsehar-site/ and must not be changed. Do not push or deploy this folder.
+
 GUL SEHAR PORTFOLIO SITE
 
 Folder structure:
