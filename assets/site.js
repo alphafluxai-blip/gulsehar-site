@@ -38,14 +38,14 @@
     gsap.set('.hero-tag', { opacity: 0, y: 40 });
     gsap.set('.proof', { opacity: 0, y: 50 });
     var tl = gsap.timeline({ scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom bottom', scrub: 0.6 } });
-    tl.to('.hero-copy', { y: -160, opacity: 0, ease: 'none' }, 0)
+    tl.to('.hero-copy', { y: -100, opacity: 0, ease: 'none' }, 0)
       .to('.hero-cut .cut', { scale: 1.32, x: '-18vw', ease: 'none' }, 0)
       .to('.hero-ring', { rotate: 35, scale: 1.25, ease: 'none' }, 0)
       .to('.hero-bg', { backgroundPosition: '40% 70%', ease: 'none' }, 0)
       .to('.t1, .t3, .t5', { x: -220, opacity: 0, ease: 'none' }, 0)
       .to('.t2, .t4, .t6', { x: 220, opacity: 0, ease: 'none' }, 0)
-      .fromTo('.hero-tag', { opacity: 0, y: 40 }, { opacity: 1, y: 0, ease: 'none' }, 0.35)
-      .fromTo('.proof', { opacity: 0, y: 50 }, { opacity: 1, y: 0, ease: 'none' }, 0.55);
+      .fromTo('.hero-tag', { opacity: 0, y: 40 }, { opacity: 1, y: 0, ease: 'none' }, 0.25)
+      .fromTo('.proof', { opacity: 0, y: 50 }, { opacity: 1, y: 0, ease: 'none' }, 0.4);
   }
 
   function stepper(sel, count, onStep) {
